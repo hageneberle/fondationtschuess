@@ -24,15 +24,21 @@
     p {
       font-size: 19px;
     }
-/* Media query für Geräte mit max width px */
-    @media screen and (max-width: 999px) {
-      p {
-        font-size: 14px;
-      }
 /* für img geltend */
 	img {
 	display: block;
 	max-width: 30%;
+	height: auto;
+	margin-left: 0;
+		}
+/* Response für Geräte mit max width px */
+    @media screen and (max-width: 999px) {
+      p {
+        font-size: 14px;
+      }
+	    img {
+	display: block;
+	max-width: 100%;
 	height: auto;
 	margin-left: 0;
 		}
