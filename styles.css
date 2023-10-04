@@ -2,7 +2,7 @@
     a {
     font-style: oblique;
     font-style: bold;
-    font-size: 18px;
+    font-size: 15px;
     }
 /* für p geltend */
     p {
@@ -18,7 +18,7 @@
 /* für img geltend */
 	img {
 	display: block;
-	max-width: 20%;
+	max-width: 60%;
 	height: auto;
 	margin: 0 0 30 0;
 		}
