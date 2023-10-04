@@ -2,12 +2,12 @@
     a {
     font-style: oblique;
     font-style: bold;
-    font-size: 15px;
+    font-size: 18px;
     }
 /* für p geltend */
     p {
     font-style: normal;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 300;
     }
 /* für body geltend */ 
@@ -29,7 +29,7 @@
 	max-width: 300px;
       }
 	    a {
-        font-size: 18px;
+        font-size: 16px;
 	max-width: 300px;
       }
 	img {
