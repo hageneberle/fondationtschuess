@@ -26,6 +26,28 @@
     <span>Send</span>
   </button>
 </form>
+ <div id="subscription-message"></div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get the form element
+        const form = document.querySelector(".pageclip-form");
+
+        // Get the subscription message element
+        const messageElement = document.getElementById("subscription-message");
+
+        // Add an event listener for the form submission
+        form.addEventListener("submit", function (e) {
+          e.preventDefault(); // Prevent the form from actually submitting
+
+          // Hide the form
+          form.style.display = "none";
+
+          // Display the "Thanks for subscribing" message
+          messageElement.textContent = "Thanks for subscribing!";
+        });
+      });
+    </script>
 	<br>
 	 <br>
 	  <br>
