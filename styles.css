@@ -40,7 +40,8 @@
 		}
 	    }
 /* highlighted Text*/
-  body::selection {
+  	a::selection,
+	p::selection	{
     background-color: #ffff99; /* Light yellow color for highlighting */
     color: #000; /* Change this to the desired text color */
   }
