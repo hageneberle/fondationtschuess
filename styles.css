@@ -39,3 +39,8 @@
 	margin-left: 0;
 		}
 	    }
+/* highlighted Text*/
+  p::selection {
+    background-color: #ffff99; /* Light yellow color for highlighting */
+    color: #000; /* Change this to the desired text color */
+  }
