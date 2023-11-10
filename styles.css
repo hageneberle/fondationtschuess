@@ -41,6 +41,6 @@
 	    }
 /* highlighted Text*/
   body::selection {
-    background-color: #ffff99 !important; /* Light yellow color for highlighting */
-    color: #000 !important; /* Change this to the desired text color */
+    background-color: #ffff99; /* Light yellow color for highlighting */
+    color: #000; /* Change this to the desired text color */
   }
