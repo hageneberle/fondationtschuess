@@ -44,7 +44,8 @@
 	p::selection,
 	i::selection,
 	u::selection,
-	br::selection	{
+	br::selection,
+	b::selection	{
     background-color: #ffff99; /* Light yellow color for highlighting */
     color: #000; /* Change this to the desired text color */
   }
