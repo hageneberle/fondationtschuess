@@ -40,6 +40,7 @@
 		}
 	    }
 /* highlighted Text*/
+	{
   	a::selection,
 	p::selection,
 	i::selection,
@@ -47,6 +48,6 @@
 	br::selection,
 	b::selection,
 	s::selection,	{
-    background-color: #ffff99; /* Light yellow color for highlighting */
+    background-color: #0000EE; /* Light yellow color for highlighting */
     color: #000; /* Change this to the desired text color */
   }
