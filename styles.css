@@ -39,15 +39,13 @@
 	margin-left: 0;
 		}
 	    }
-/* highlighted Text*/
-	{
-  	a::selection,
-	p::selection,
-	i::selection,
-	u::selection,
-	br::selection,
-	b::selection,
-	s::selection,	{
-    background-color: #0000EE; /* Light yellow color for highlighting */
-    color: #000; /* Change this to the desired text color */
-  }
+/* Highlighted Text */
+a::selection,
+p::selection,
+i::selection,
+u::selection,
+b::selection,
+s::selection {
+  background-color: #0000EE; /* Light yellow color for highlighting */
+  color: #000; /* Change this to the desired text color */
+}
