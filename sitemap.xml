@@ -15,7 +15,12 @@
 <url>
   <loc>https://fondationtschuess.org/index</loc>
   <lastmod>2024-01-02T14:05:08+00:00</lastmod>
-  <priority>0.80</priority>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://fondationtschuess.org/information</loc>
+  <lastmod>2024-01-02T14:05:08+00:00</lastmod>
+  <priority>0.90</priority>
 </url>
 <url>
   <loc>https://fondationtschuess.org/whiskers</loc>
@@ -101,16 +106,6 @@
   <loc>https://fondationtschuess.org/seminar</loc>
   <lastmod>2024-01-02T14:05:08+00:00</lastmod>
   <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://fondationtschuess.org/information</loc>
-  <lastmod>2024-01-02T14:05:08+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://fondationtschuess.org/index.html</loc>
-  <lastmod>2024-01-02T14:05:08+00:00</lastmod>
-  <priority>0.64</priority>
 </url>
 <url>
   <loc>https://fondationtschuess.org/tba</loc>
