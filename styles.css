@@ -1,5 +1,7 @@
 h1 {
-  font-style: normal;
+font-style: oblique;
+  font-weight: normal;
+ font-size: 18px;
 }
 
     a {
@@ -27,6 +29,12 @@ h1 {
 		}
 /* Response für Geräte mit max width px */
     @media screen and (max-width: 999px) {
+h1 {
+font-style: oblique;
+  font-weight: normal;
+ font-size: 17px;
+max-width: 300px;
+}
       p {
         font-size: 12px;
 	max-width: 300px;
