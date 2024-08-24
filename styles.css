@@ -1,21 +1,24 @@
-/* für a geltend */
+h1 {
+  font-weight: normal;
+}
+
     a {
     font-style: oblique;
     font-style: bold;
     font-size: 18px;
     }
-/* für p geltend */
+
     p {
     font-style: normal;
     font-size: 14px;
     font-weight: 300;
     }
-/* für body geltend */ 
+
     body {
     margin: 25px;
 	    font-family: "Times New Roman", Times, serif;
     }
-/* für img geltend */
+
 	img {
 	display: block;
 	max-width: 60%;
