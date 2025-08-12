@@ -153,6 +153,26 @@
   <priority>0.80</priority>
 </url>
 <url>
+  <loc>https://fondationtschuess.org/sonor</loc>
+  <lastmod>2024-01-02T14:05:08+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://fondationtschuess.org/uturn</loc>
+  <lastmod>2024-01-02T14:05:08+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://fondationtschuess.org/single</loc>
+  <lastmod>2024-01-02T14:05:08+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://fondationtschuess.org/presentationpreparation</loc>
+  <lastmod>2024-01-02T14:05:08+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
   <loc>https://fondationtschuess.org/tba</loc>
   <lastmod>2024-01-02T14:05:08+00:00</lastmod>
   <priority>0.64</priority>
@@ -161,3 +181,4 @@
 
 
 </urlset>
+
