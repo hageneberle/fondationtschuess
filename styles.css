@@ -27,7 +27,7 @@ b {
     a {
     font-style: oblique;
     font-style: bold;
-    font-size: 14px;
+    font-size: 15px;
     }
 
     p {
@@ -42,7 +42,7 @@ b {
 
 	img {
 	display: block;
-	max-width: 60%;
+	max-width: 50%;
 	height: auto;
 	margin: 0 0 30 0;
 		}
@@ -67,7 +67,7 @@ b {
 	max-width: 300px;
       }
 	    a {
-        font-size: 17px;
+        font-size: 13px;
 	max-width: 300px;
       }
 	img {
