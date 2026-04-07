@@ -1,7 +1,7 @@
 h1 {
 font-style: oblique;
  font-size: 14px;
-font-weight: normal;
+font-weight: 500;
 }
 
 h2 {
@@ -94,6 +94,6 @@ i::selection,
 u::selection,
 b::selection,
 s::selection {
-  background-color: #0000EE; /* Light yellow color for highlighting */
-  color: #FFFFFF; /* Change this to the desired text color */
+  background-color: ##FFFF00; /* Light yellow color for highlighting */
+  color: #000000; /* Change this to the desired text color */
 }
