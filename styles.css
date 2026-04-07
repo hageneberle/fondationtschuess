@@ -1,7 +1,6 @@
 h1 {
 font-style: oblique;
  font-size: 14px;
-text-decoration: underline;
 font-weight: normal;
 }
 
@@ -56,8 +55,6 @@ b {
     @media screen and (max-width: 999px) {
 	h1 {
 	font-style: oblique;
-		text-decoration: underline;
-	  font-weight: normal;
 	 font-size: 13px;
 	max-width: 300px;
 	}	
