@@ -87,13 +87,3 @@ max-width: 300px;
 		}
 	    }
 
-/* Highlighted Text */
-a::selection,
-p::selection,
-i::selection,
-u::selection,
-b::selection,
-s::selection {
-  background-color: ##FFFF00; /* Light yellow color for highlighting */
-  color: #000000; /* Change this to the desired text color */
-}
