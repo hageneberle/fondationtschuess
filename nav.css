@@ -12,13 +12,13 @@ nav {
   font-family: "Arial", Helvetica, sans-serif;
   z-index: 9999;
   line-height: 1;
+  mix-blend-mode: difference;
 }
 
 nav a {
   color: white !important;
   text-decoration: none !important;
   font-style: normal !important;
-  mix-blend-mode: difference;
   display: inline-block;
 }
 /* ── Mobile ── */
