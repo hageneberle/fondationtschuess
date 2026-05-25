@@ -61,7 +61,7 @@
     return doc.body.innerHTML;
   }
 
-  // ── Seite als Block in den Feed einfügen ────────────────────────────────────
+  // ── Seite als Block in den Feed einfügen + Balken────────────────────────────────────
 
   function createBlock(slug, html) {
     const block = document.createElement('div');
@@ -71,9 +71,9 @@
       min-height: 100vh;
       box-sizing: border-box;
       border-top: none;
-      padding-top: 18px;
-      background-image: linear-gradient(#d0d0d0 18px, transparent 18px);
-      background-size: 100vw 18px;
+      padding-top: 100px;
+      background-image: linear-gradient(#d0d0d0 100px, transparent 100px);
+      background-size: 100vw 100px;
       background-position: left top;
       background-repeat: no-repeat;
       margin-left: calc(-50vw + 50%);
