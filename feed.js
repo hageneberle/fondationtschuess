@@ -65,7 +65,7 @@
     block.className = 'ft-block';
     block.dataset.slug = slug;
     block.style.cssText = `
-      min-height: 100vh;
+      min-height: 70vh;
       box-sizing: border-box;
       user-select: text;
       -webkit-user-select: text;
