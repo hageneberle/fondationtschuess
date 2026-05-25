@@ -70,7 +70,16 @@
     block.style.cssText = `
       min-height: 100vh;
       box-sizing: border-box;
-      border-top: 18px solid #d0d0d0;
+      border-top: none;
+      padding-top: 18px;
+      background-image: linear-gradient(#d0d0d0 18px, transparent 18px);
+      background-size: 100vw 18px;
+      background-position: left top;
+      background-repeat: no-repeat;
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+      padding-left: calc(50vw - 50%);
+      padding-right: calc(50vw - 50%);
     `;
     block.innerHTML = extractBody(html);
     return block;
