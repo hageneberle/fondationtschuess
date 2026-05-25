@@ -48,7 +48,11 @@ img {
   width: 200px;
   height: auto;
 }
-
+iframe {
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
 /* ── Mobile ── */
 @media screen and (max-width: 999px) {
 
@@ -75,5 +79,9 @@ img {
     max-width: 200px;
     margin-left: 0;
   }
-
+iframe {
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
 }
