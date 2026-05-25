@@ -18,8 +18,8 @@
   // ── ↑↓ Nav-Buttons ausblenden ──────────────────────────────────────────────
   const hideStyle = document.createElement('style');
   hideStyle.textContent = `
-    nav a[href]:not([href="index.html"]) { display: none !important; }
-    footer nav a[href]:not([href="index.html"]) { display: none !important; }
+    nav { display: none !important; }
+    footer nav { display: none !important; }
   `;
   document.head.appendChild(hideStyle);
 
@@ -69,8 +69,8 @@
     block.dataset.slug = slug;
     block.style.cssText = `
       min-height: 100vh;
-      border-top: none;
       box-sizing: border-box;
+      border-top: 18px solid #d0d0d0;
     `;
     block.innerHTML = extractBody(html);
     return block;
@@ -201,7 +201,7 @@
     const firstBlock = document.createElement('div');
     firstBlock.className = 'ft-block';
     firstBlock.dataset.slug = slug;
-    firstBlock.style.cssText = 'min-height: 100vh; box-sizing: border-box;';
+    firstBlock.style.cssText = 'min-height: 100vh; box-sizing: border-box; border-top: none;';
     while (document.body.firstChild) {
       firstBlock.appendChild(document.body.firstChild);
     }
