@@ -70,7 +70,7 @@
       border-top: none;
       padding-top: 120vh;
       background-image: linear-gradient(${barColor} 120vh, transparent 120vh);
-      background-size: calc(100% + 50px) 120vh;
+      background-size: 100vw 120vh;      
       background-position: left top;
       background-repeat: no-repeat;
       margin-left: -25px;
