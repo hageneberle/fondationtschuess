@@ -7,7 +7,7 @@
 (function () {
 
   const ORDER_URL  = 'order.json';
-  const BAR_HEIGHT = '10px';
+  const BAR_HEIGHT = '2vh';
   const BAR_COLOR  = '#000000';
   const BODY_PAD   = 25;         // px – muss mit body { margin } in styles.css übereinstimmen
   const PRELOAD    = '400px';    // wie früh die nächste Seite vorgeladen wird
@@ -22,7 +22,7 @@
       top: ${BODY_PAD}px;
       right: ${BODY_PAD}px;
       color: #0000EE;
-      font-size: 15px;
+      font-size: 30px;
       font-family: Arial, Helvetica, sans-serif;
       text-decoration: none;
       z-index: 9999;
