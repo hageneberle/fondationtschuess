@@ -15,14 +15,6 @@
   const ORDER_URL = 'order.json';
   const PRELOAD_MARGIN = '200px'; // wie früh die nächste Seite geladen wird
 
-  // ── ↑↓ Nav-Buttons ausblenden ──────────────────────────────────────────────
-  const hideStyle = document.createElement('style');
-  hideStyle.textContent = `
-    nav { display: none !important; }
-    footer nav { display: none !important; }
-  `;
-  document.head.appendChild(hideStyle);
-
   // ── Globaler State ──────────────────────────────────────────────────────────
   let order = [];          // alle slugs aus order.json
   let loadedSlugs = [];    // slugs die bereits im DOM sind
