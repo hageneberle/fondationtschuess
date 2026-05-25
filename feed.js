@@ -224,8 +224,8 @@
     loadedSlugs = [slug];
     observeBlock(firstBlock);
 
-    loadNext();
-    loadPrev();
+     loadNext();
+    if (prevSlug(slug)) loadPrev();
   }
 
   init();
