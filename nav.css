@@ -14,7 +14,7 @@ nav a {
 nav {
   position: fixed;
   top: 25px;
-  right: 25px;
+  right: 60px;
   font-size: 15px;
   font-family: "Arial", Helvetica, sans-serif;
   z-index: 9999;
@@ -24,8 +24,8 @@ nav {
 /* ── Mobile ── */
 @media screen and (max-width: 999px) {
   nav {
-    top: 15px;     /* Abstand vom oberen Rand */
-    right: 15px;   /* Abstand vom rechten Rand */
-    font-size: 13px;
+    top: 25px;     /* Abstand vom oberen Rand */
+    right: 20px;   /* Abstand vom rechten Rand */
+    font-size: 15px;
   }
 }
