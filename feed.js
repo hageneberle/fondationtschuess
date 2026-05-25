@@ -1,25 +1,16 @@
 /**
  * feed.js – Fondation Tschuess
- * ====================================================
- * Erzeugt einen nahtlosen vertikalen Feed aus einzelnen
- * HTML-Seiten. Scrollen nach unten lädt die nächste Seite,
- * scrollen nach oben die vorherige. Die URL aktualisiert
- * sich automatisch. ↑↓-Buttons werden ausgeblendet.
- *
- * Einbinden direkt vor </body> in jeder Projektseite:
- * <script src="feed.js"></script>
  */
 
 (function () {
 
   const ORDER_URL = 'order.json';
-  const PRELOAD_MARGIN = '200px'; // wie früh die nächste Seite geladen wird
-
+  const PRELOAD_MARGIN = '200px';
 
   // ── Globaler State ──────────────────────────────────────────────────────────
-  let order = [];          // alle slugs aus order.json
-  let loadedSlugs = [];    // slugs die bereits im DOM sind
-  let loading = false;     // verhindert doppeltes Laden
+  let order = [];
+  let loadedSlugs = [];
+  let loading = false;
 
   // ── Hilfsfunktionen ─────────────────────────────────────────────────────────
 
@@ -52,32 +43,44 @@
     return doc.body.innerHTML;
   }
 
+  // ── Farbbalken erzeugen ─────────────────────────────────────────────────────
+
+  function createBar(barColor) {
+    const bar = document.createElement('div');
+    bar.style.cssText = `
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: 120vh;
+      background: ${barColor};
+    `;
+    return bar;
+  }
+
   // ── Seite als Block in den Feed einfügen ────────────────────────────────────
 
   function createBlock(slug, html) {
     const block = document.createElement('div');
     block.className = 'ft-block';
     block.dataset.slug = slug;
-    const palette = ['#D0201A', '#E8720C', '#F5C300', '#007B40', '#003F8A'];
-    const barColor = palette[Math.floor(Math.random() * palette.length)];
-
     block.style.cssText = `
       min-height: 100vh;
       box-sizing: border-box;
-      border-top: none;
-      padding-top: 120vh;
-      background-image: linear-gradient(${barColor} 120vh, transparent 120vh);
-      background-size: 100vw 120vh;
-      background-position: left top;
-      background-repeat: no-repeat;
-      margin-left: -25px;
-      margin-right: -25px;
-      padding-left: 25px;
-      padding-right: 25px;
       user-select: text;
       -webkit-user-select: text;
     `;
-    block.innerHTML = extractBody(html);
+
+    // Farbbalken zuerst einfügen
+    const palette = ['#D0201A', '#E8720C', '#F5C300', '#007B40', '#003F8A'];
+    const barColor = palette[Math.floor(Math.random() * palette.length)];
+    block.appendChild(createBar(barColor));
+
+    // Dann Seiteninhalt
+    const content = document.createElement('div');
+    content.innerHTML = extractBody(html);
+    block.appendChild(content);
+
     return block;
   }
 
@@ -151,23 +154,16 @@
     loading = false;
   }
 
-  // ── Intersection Observer: wann laden? ──────────────────────────────────────
+  // ── Intersection Observer ───────────────────────────────────────────────────
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
       const slug = entry.target.dataset.slug;
-
-      if (slug === loadedSlugs[loadedSlugs.length - 1]) {
-        loadNext();
-      }
-      if (slug === loadedSlugs[0]) {
-        loadPrev();
-      }
+      if (slug === loadedSlugs[loadedSlugs.length - 1]) loadNext();
+      if (slug === loadedSlugs[0]) loadPrev();
     });
-  }, {
-    rootMargin: PRELOAD_MARGIN
-  });
+  }, { rootMargin: PRELOAD_MARGIN });
 
   function observeBlock(block) {
     observer.observe(block);
@@ -181,7 +177,7 @@
     scrollTimer = setTimeout(updateUrl, 100);
   }, { passive: true });
 
-  // ── Init ─────────────────────────────────────────────────────────────────────
+  // ── Init ────────────────────────────────────────────────────────────────────
 
   async function init() {
     try {
@@ -198,10 +194,11 @@
       return;
     }
 
+    // Ersten Block aus bestehendem Body-Inhalt bauen (kein Farbbalken oben)
     const firstBlock = document.createElement('div');
     firstBlock.className = 'ft-block';
     firstBlock.dataset.slug = slug;
-    firstBlock.style.cssText = 'min-height: 100vh; box-sizing: border-box; border-top: none; user-select: text; -webkit-user-select: text;';
+    firstBlock.style.cssText = 'min-height: 100vh; box-sizing: border-box; user-select: text; -webkit-user-select: text;';
     while (document.body.firstChild) {
       firstBlock.appendChild(document.body.firstChild);
     }
@@ -212,8 +209,16 @@
     feed.style.userSelect = 'text';
     feed.style.webkitUserSelect = 'text';
     document.body.style.overflowX = 'hidden';
+    document.body.style.margin = '0'; // Body-Margin entfernen – Balken übernimmt Layout
     feed.appendChild(firstBlock);
     document.body.appendChild(feed);
+
+    // Padding für Seiteninhalt global setzen
+    const style = document.createElement('style');
+    style.textContent = `
+      .ft-block > div { padding: 25px; box-sizing: border-box; }
+    `;
+    document.head.appendChild(style);
 
     loadedSlugs = [slug];
     observeBlock(firstBlock);
