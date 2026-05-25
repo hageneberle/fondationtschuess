@@ -6,7 +6,7 @@ nav {
   font-family: "Arial", Helvetica, sans-serif;
   z-index: 9999;
   line-height: 1;
-  background: white;
+  background: rgba(255, 255, 255, 1); /* 0.8 = 80% weiß */
   padding: 3px 6px;
 }
 
