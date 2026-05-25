@@ -7,9 +7,8 @@
 (function () {
 
   const ORDER_URL  = 'order.json';
-  const BAR_HEIGHT = '2vh';
+  const BAR_HEIGHT = '10px';
   const BAR_COLOR  = '#000000';
-  const BODY_PAD   = 25;         // px – muss mit body { margin } in styles.css übereinstimmen
   const PRELOAD    = '400px';    // wie früh die nächste Seite vorgeladen wird
 
   // ── Fixer ↵-Button ──────────────────────────────────────────────────────────
@@ -22,7 +21,7 @@
       top: ${BODY_PAD}px;
       right: ${BODY_PAD}px;
       color: #0000EE;
-      font-size: 30px;
+      font-size: 15px;
       font-family: Arial, Helvetica, sans-serif;
       text-decoration: none;
       z-index: 9999;
@@ -47,7 +46,6 @@
       width: 100vw;
       height: ${BAR_HEIGHT};
       background: ${BAR_COLOR};
-      margin-left: -${BODY_PAD}px;
       flex-shrink: 0;
     `;
     return bar;
@@ -215,12 +213,15 @@
 
     // CSS für Feed-Layout
     const style = document.createElement('style');
+    // Body-Margin auslesen und als Padding auf ft-inner übertragen
+    // damit feed.js den margin nicht überschreibt
+    const computedMargin = parseInt(getComputedStyle(document.body).marginLeft) || 25;
     style.textContent = `
       body { margin: 0 !important; overflow-x: hidden; }
       #ft-feed { display: block; }
       .ft-block { display: block; }
-      .ft-inner { padding: ${BODY_PAD}px; box-sizing: border-box; }
-      .ft-bar   { display: block; }
+      .ft-inner { padding: ${computedMargin}px; box-sizing: border-box; }
+      .ft-bar   { display: block; margin-left: -${computedMargin}px; }
     `;
     document.head.appendChild(style);
 
