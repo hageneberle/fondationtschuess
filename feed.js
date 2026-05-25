@@ -14,7 +14,7 @@
   indexBtn.style.cssText = `
     position: fixed;
     top: 25px;
-    left: 25px;
+    right: 25px;
     color: #0000EE;
     font-size: 15px;
     font-family: Arial, Helvetica, sans-serif;
