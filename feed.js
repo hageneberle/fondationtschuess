@@ -16,7 +16,7 @@
     top: 25px;
     right: 25px;
     color: #0000EE;
-    font-size: 15px;
+    font-size: 20px;
     font-family: Arial, Helvetica, sans-serif;
     text-decoration: none;
     z-index: 9999;
@@ -69,12 +69,14 @@
   function createBar(barColor) {
     const bar = document.createElement('div');
     bar.style.cssText = `
-      position: relative;
-      left: 50%;
-      transform: translateX(-50%);
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100vw;
       height: 5px;
       background: ${barColor};
+      margin-left: 50%;
+      transform: translateX(-50%);
     `;
     return bar;
   }
@@ -87,6 +89,8 @@
     block.dataset.slug = slug;
     block.style.cssText = `
       min-height: 5px;
+      position: relative;
+      padding-top: 5px;
       box-sizing: border-box;
       user-select: text;
       -webkit-user-select: text;
