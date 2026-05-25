@@ -13,15 +13,8 @@ nav a {
   text-decoration: none !important;
   font-style: normal !important;
   display: inline-block;
-  text-shadow:
-    -2px -2px 0 white,
-     2px -2px 0 white,
-    -2px  2px 0 white,
-     2px  2px 0 white,
-    -2px  0   0 white,
-     2px  0   0 white,
-     0   -2px 0 white,
-     0    2px 0 white;
+  -webkit-text-stroke: 1px white;
+  text-stroke: 1px white;
 }
 
 @media screen and (max-width: 999px) {
