@@ -90,6 +90,6 @@ body {
     display: block;
     max-width: 100vw;
     height: auto;
-    margin: 0 0 5x -25px; /* war: 30 ohne Einheit – jetzt korrekt 30px */
+    margin: -5 0 5x -5px; /* war: 30 ohne Einheit – jetzt korrekt 30px */
   }
 }
