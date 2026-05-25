@@ -2,7 +2,7 @@ nav {
   position: fixed;
   top: 25px;
   right: 20px;
-  font-size: 25px;
+  font-size: 25px !important;
   font-family: "Arial", Helvetica, sans-serif;
   z-index: 9999;
   line-height: 1;
@@ -14,6 +14,7 @@ nav a {
   color: black !important;
   text-decoration: none !important;
   font-style: normal !important;
+  font-size: 25px !important; /* ← hier anpassen */
   display: inline-block;
 }
 
@@ -21,6 +22,6 @@ nav a {
   nav {
     top: 25px;
     right: 30px;
-    font-size: 21px;
+    font-size: 21px !important;
   }
 }
