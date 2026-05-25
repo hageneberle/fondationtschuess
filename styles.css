@@ -49,62 +49,31 @@ img {
   height: auto;
 }
 
-/* ── CSS-Variable für feed.js Balken-Offset ── */
-:root {
-  --body-margin: 25px; /* muss mit body { margin } übereinstimmen */
-}
-
-/* ── Mobile (max. 999px) ── */
+/* ── Mobile ── */
 @media screen and (max-width: 999px) {
 
-  /* Textabstand links/rechts – hier anpassen */
-  :root { --pad: 15px; --body-margin: 15px; }
-
   body {
-    margin: var(--body-margin, var(--pad));
-    font-family: "Arial", Helvetica, sans-serif;
-    overflow-x: hidden;
-  }
-
-  h1 {
-    font-style: oblique;
-    font-size: 13px;
-    font-weight: normal;
-  }
-
-  h2 {
-    font-style: normal;
-    font-weight: normal;
-    font-size: 12px;
-  }
-
-  h3 {
-    font-style: normal;
-    font-weight: normal;
-    font-size: 12px;
-  }
-
-  p {
-    font-size: 12px;
-  }
-
-  a {
+    margin: 5px; /* ← Texteinzug links/rechts auf Mobile */
     font-size: 13px;
   }
 
-  /* Bilder randlos – kompensiert body margin */
+  h1 { font-size: 13px; }
+  h2 { font-size: 12px; }
+  h3 { font-size: 12px; }
+  p  { font-size: 12px; }
+  a  { font-size: 13px; }
+
   img {
-    display: block;
-    width: calc(100% + 2 * var(--pad));
-    max-width: calc(100% + 2 * var(--pad));
+    width: calc(100% + 10px); /* = 2 × 15px Einzug */
+    max-width: calc(100% + 10px);
     height: auto;
-    margin: 0 0 10px calc(-1 * var(--pad));
+    margin: 0 0 10px -5px; /* = negativer Einzug */
   }
 
-  /* Ausnahme: kleine Bilder (z.B. .resize) nicht strecken */
   img.resize {
     width: 200px;
     max-width: 200px;
     margin-left: 0;
   }
+
 }
