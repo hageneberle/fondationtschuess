@@ -24,14 +24,12 @@
   // ── Hilfsfunktionen ─────────────────────────────────────────────────────────
 
   function currentSlug() {
-    // Slug aus URL ableiten (letztes Segment, ohne .html)
     const path = window.location.pathname;
     const seg = path.split('/').filter(Boolean).pop() || '';
     return seg.replace(/\.html$/, '');
   }
 
   function slugToUrl(slug) {
-    // Relativ zur aktuellen Basis
     const base = window.location.pathname.split('/').slice(0, -1).join('/');
     return base + '/' + slug;
   }
@@ -60,7 +58,6 @@
     const block = document.createElement('div');
     block.className = 'ft-block';
     block.dataset.slug = slug;
-    // Zufällige Farbe aus Benetton-Palette
     const palette = ['#D0201A', '#E8720C', '#F5C300', '#007B40', '#003F8A'];
     const barColor = palette[Math.floor(Math.random() * palette.length)];
 
@@ -70,13 +67,15 @@
       border-top: none;
       padding-top: 120vh;
       background-image: linear-gradient(${barColor} 120vh, transparent 120vh);
-      background-size: 100vw 120vh;      
+      background-size: 100vw 120vh;
       background-position: left top;
       background-repeat: no-repeat;
       margin-left: -25px;
       margin-right: -25px;
       padding-left: 25px;
       padding-right: 25px;
+      user-select: text;
+      -webkit-user-select: text;
     `;
     block.innerHTML = extractBody(html);
     return block;
@@ -139,7 +138,6 @@
       const html = await res.text();
       const block = createBlock(prev, html);
 
-      // Scroll-Position merken damit es nicht springt
       const scrollBefore = window.scrollY;
       feed.insertBefore(block, feed.firstChild);
       const addedHeight = block.offsetHeight;
@@ -160,11 +158,9 @@
       if (!entry.isIntersecting) return;
       const slug = entry.target.dataset.slug;
 
-      // Letzter Block → nächste Seite laden
       if (slug === loadedSlugs[loadedSlugs.length - 1]) {
         loadNext();
       }
-      // Erster Block → vorherige Seite laden
       if (slug === loadedSlugs[0]) {
         loadPrev();
       }
@@ -188,7 +184,6 @@
   // ── Init ─────────────────────────────────────────────────────────────────────
 
   async function init() {
-    // order.json laden
     try {
       const res = await fetch(ORDER_URL);
       order = await res.json();
@@ -203,19 +198,19 @@
       return;
     }
 
-    // Bestehenden Body-Inhalt in ersten Block packen
     const firstBlock = document.createElement('div');
     firstBlock.className = 'ft-block';
     firstBlock.dataset.slug = slug;
-    firstBlock.style.cssText = 'min-height: 100vh; box-sizing: border-box; border-top: none;';
+    firstBlock.style.cssText = 'min-height: 100vh; box-sizing: border-box; border-top: none; user-select: text; -webkit-user-select: text;';
     while (document.body.firstChild) {
       firstBlock.appendChild(document.body.firstChild);
     }
 
-    // Feed-Container
     window.feed = document.createElement('div');
     feed.id = 'ft-feed';
     feed.style.overflowX = 'hidden';
+    feed.style.userSelect = 'text';
+    feed.style.webkitUserSelect = 'text';
     document.body.style.overflowX = 'hidden';
     feed.appendChild(firstBlock);
     document.body.appendChild(feed);
@@ -223,7 +218,6 @@
     loadedSlugs = [slug];
     observeBlock(firstBlock);
 
-    // Direkt erste Nachbarn vorladen
     loadNext();
     loadPrev();
   }
