@@ -52,7 +52,7 @@
       left: 50%;
       transform: translateX(-50%);
       width: 100vw;
-      height: 90vh;
+      height: 70vh;
       background: ${barColor};
     `;
     return bar;
@@ -72,7 +72,7 @@
     `;
 
     // Farbbalken zuerst einfügen
-    const palette = ['##D0201A', '#E8720C', '#F5C300', '#007B40', '#003F8A'];
+    const palette = ['#c0c0c0'];
     const barColor = palette[Math.floor(Math.random() * palette.length)];
     block.appendChild(createBar(barColor));
 
