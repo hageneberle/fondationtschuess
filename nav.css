@@ -10,7 +10,7 @@ nav {
 }
 
 nav a {
-  color: white !important;
+  color: black !important;
   text-decoration: none !important;
   font-style: normal !important;
   display: inline-block;
