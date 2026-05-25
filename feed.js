@@ -198,7 +198,7 @@
     const firstBlock = document.createElement('div');
     firstBlock.className = 'ft-block';
     firstBlock.dataset.slug = slug;
-    firstBlock.style.cssText = 'min-height: 100vh; box-sizing: border-box; user-select: text; -webkit-user-select: text;';
+    firstBlock.style.cssText = 'min-height: auto; box-sizing: border-box; user-select: text; -webkit-user-select: text;';
     while (document.body.firstChild) {
       firstBlock.appendChild(document.body.firstChild);
     }
