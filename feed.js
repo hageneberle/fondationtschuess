@@ -15,6 +15,7 @@
   const ORDER_URL = 'order.json';
   const PRELOAD_MARGIN = '200px'; // wie früh die nächste Seite geladen wird
 
+
   // ── Globaler State ──────────────────────────────────────────────────────────
   let order = [];          // alle slugs aus order.json
   let loadedSlugs = [];    // slugs die bereits im DOM sind
@@ -59,11 +60,9 @@
     const block = document.createElement('div');
     block.className = 'ft-block';
     block.dataset.slug = slug;
-    // Zufällige Farbe für jeden Trennbalken
-    const r = Math.floor(Math.random() * 256);
-    const g = Math.floor(Math.random() * 256);
-    const b = Math.floor(Math.random() * 256);
-    const barColor = `rgb(${r},${g},${b})`;
+    // Zufällige Farbe aus Benetton-Palette
+    const palette = ['#D0201A', '#E8720C', '#F5C300', '#007B40', '#003F8A'];
+    const barColor = palette[Math.floor(Math.random() * palette.length)];
 
     block.style.cssText = `
       min-height: 100vh;
@@ -216,6 +215,8 @@
     // Feed-Container
     window.feed = document.createElement('div');
     feed.id = 'ft-feed';
+    feed.style.overflowX = 'hidden';
+    document.body.style.overflowX = 'hidden';
     feed.appendChild(firstBlock);
     document.body.appendChild(feed);
 
