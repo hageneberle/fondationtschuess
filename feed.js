@@ -68,9 +68,9 @@
       min-height: 100vh;
       box-sizing: border-box;
       border-top: none;
-      padding-top: 600px;
-      background-image: linear-gradient(${barColor} 600px, transparent 600px);
-      background-size: calc(100% + 50px) 600px;
+      padding-top: 100vh;
+      background-image: linear-gradient(${barColor} 100vh, transparent 100vh);
+      background-size: calc(100% + 50px) 100vh;
       background-position: left top;
       background-repeat: no-repeat;
       margin-left: -25px;
