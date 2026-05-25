@@ -6,7 +6,28 @@
 
   const ORDER_URL = 'order.json';
   const PRELOAD_MARGIN = '200px';
-
+  
+// ── Fixer Index-Button ──────────────────────────────────────────────────────
+  const indexBtn = document.createElement('a');
+  indexBtn.href = 'index.html';
+  indexBtn.innerHTML = '&#8629;';
+  indexBtn.style.cssText = `
+    position: fixed;
+    top: 25px;
+    left: 25px;
+    color: #0000EE;
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    z-index: 9999;
+  `;
+  document.body.appendChild(indexBtn);
+  
+  // ── Alle Nav-Buttons ausblenden ─────────────────────────────────────────────
+  const hideStyle = document.createElement('style');
+  hideStyle.textContent = `nav { display: none !important; }`;
+  document.head.appendChild(hideStyle);
+  
   // ── Globaler State ──────────────────────────────────────────────────────────
   let order = [];
   let loadedSlugs = [];
