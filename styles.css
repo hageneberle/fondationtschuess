@@ -54,6 +54,7 @@ img {
   h1 {
     font-style: oblique;
     font-size: 13px;
+    font-weight: bold;
     max-width: 300px;
   }
 
