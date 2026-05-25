@@ -1,7 +1,7 @@
 h1 {
   font-style: oblique;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: normal;
 }
 
 h2 {
@@ -54,7 +54,7 @@ img {
   h1 {
     font-style: oblique;
     font-size: 13px;
-    font-weight: bold;
+    font-weight: normal;
     max-width: 300px;
   }
 
