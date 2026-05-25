@@ -217,6 +217,7 @@
     const style = document.createElement('style');
     style.textContent = `
       .ft-block > div { padding: 25px; box-sizing: border-box; }
+      #ft-feed > .ft-block:first-child { padding: 25px; box-sizing: border-box; }
     `;
     document.head.appendChild(style);
 
