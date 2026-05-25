@@ -72,7 +72,7 @@
     `;
 
     // Farbbalken zuerst einfügen
-    const palette = ['#D0201A', '#E8720C', '#F5C300', '#007B40', '#003F8A'];
+    const palette = ['#000000'];
     const barColor = palette[Math.floor(Math.random() * palette.length)];
     block.appendChild(createBar(barColor));
 
