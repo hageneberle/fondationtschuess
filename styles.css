@@ -54,6 +54,11 @@ iframe {
   height: auto;
   aspect-ratio: 16 / 9;
 }
+hr {
+  border: none;
+  border-top: 1px solid #000;
+  margin: 10px 0;
+}
 /* ── Mobile ── */
 @media screen and (max-width: 999px) {
 
