@@ -61,25 +61,31 @@
     return doc.body.innerHTML;
   }
 
-  // ── Seite als Block in den Feed einfügen + Balken────────────────────────────────────
+  // ── Seite als Block in den Feed einfügen ────────────────────────────────────
 
   function createBlock(slug, html) {
     const block = document.createElement('div');
     block.className = 'ft-block';
     block.dataset.slug = slug;
+    // Zufällige Farbe für jeden Trennbalken
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    const barColor = `rgb(${r},${g},${b})`;
+
     block.style.cssText = `
       min-height: 100vh;
       box-sizing: border-box;
       border-top: none;
-      padding-top: 100px;
-      background-image: linear-gradient(#d0d0d0 100px, transparent 100px);
-      background-size: 100vw 100px;
+      padding-top: 600px;
+      background-image: linear-gradient(${barColor} 600px, transparent 600px);
+      background-size: calc(100% + 50px) 600px;
       background-position: left top;
       background-repeat: no-repeat;
-      margin-left: calc(-50vw + 50%);
-      margin-right: calc(-50vw + 50%);
-      padding-left: calc(50vw - 50%);
-      padding-right: calc(50vw - 50%);
+      margin-left: -25px;
+      margin-right: -25px;
+      padding-left: 25px;
+      padding-right: 25px;
     `;
     block.innerHTML = extractBody(html);
     return block;
