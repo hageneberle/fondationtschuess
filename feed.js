@@ -73,7 +73,7 @@
       left: 50%;
       transform: translateX(-50%);
       width: 100vw;
-      height: 5vh;
+      height: 5px;
       background: ${barColor};
     `;
     return bar;
@@ -86,7 +86,7 @@
     block.className = 'ft-block';
     block.dataset.slug = slug;
     block.style.cssText = `
-      min-height: 5vh;
+      min-height: 5px;
       box-sizing: border-box;
       user-select: text;
       -webkit-user-select: text;
