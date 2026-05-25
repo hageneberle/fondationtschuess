@@ -52,7 +52,7 @@
       left: 50%;
       transform: translateX(-50%);
       width: 100vw;
-      height: 120vh;
+      height: 180vh;
       background: ${barColor};
     `;
     return bar;
