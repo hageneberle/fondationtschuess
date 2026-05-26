@@ -36,7 +36,13 @@ All images live in `/images/` as numbered JPGs. There is no asset manifest — f
 1. Add the slug to `order.json` at the desired position.
 2. Add a `<url>` entry to `sitemap.xml` with `<priority>0.80</priority>` — no `<lastmod>`. Use `%C3%B6` etc. for umlauts in the `<loc>` URL.
 3. Update the `▲`/`▼` links on the neighboring pages.
-4. Create the new HTML file following the structure of an existing page (see e.g. `ausstellung.html`): `<meta>` tags with description/keywords, `<link>` to both stylesheets, the nav block, then content.
+4. Create the new HTML file following the structure of an existing page (see e.g. `ausstellung.html`): `<meta>` tags with description/keywords, `<link>` to both stylesheets, a `<link rel="canonical">` tag, the nav block, then content.
+
+```html
+<link rel="canonical" href="https://fondationtschuess.org/[slug]">
+```
+
+Use `%C3%B6` etc. for umlauts in the canonical URL (same encoding as in `sitemap.xml`).
 5. Add a link to `index.html`.
 
 ## Git-Regeln
