@@ -29,21 +29,24 @@ Every exhibition page has a fixed nav in the top-right corner (styled by `nav.cs
 
 ### Images
 
-All images live in `/images/` as numbered JPGs. There is no asset manifest — filenames are referenced directly in HTML.
+Images live in `/images/` as JPEG + WebP pairs (e.g. `foo.jpg` and `foo.webp`). The HTML uses `<picture>` tags so browsers load WebP; JPEG serves as fallback. Both files must exist for every image. `optimize_images.py` creates the WebP versions automatically (see below).
 
 ## Adding a new exhibition page
 
 1. Add the slug to `order.json` at the desired position.
 2. Add a `<url>` entry to `sitemap.xml` with `<priority>0.80</priority>` — no `<lastmod>`. Use `%C3%B6` etc. for umlauts in the `<loc>` URL.
 3. Update the `▲`/`▼` links on the neighboring pages.
-4. Create the new HTML file following the structure of an existing page (see e.g. `ausstellung.html`): `<meta>` tags with description/keywords, `<link>` to both stylesheets, a `<link rel="canonical">` tag, the nav block, then content.
+4. Place images in `/images/` as JPEGs (max. 2000px wide; camera originals are scaled down automatically).
+5. Create the HTML file following the structure of an existing page (see e.g. `ausstellung.html`): `<meta>` tags with description/keywords, `<link>` to both stylesheets, a `<link rel="canonical">` tag, the nav block, then content. Reference images as `<img src="images/foo.jpg" alt="...">` — the script in the next step wraps them in `<picture>` automatically.
 
 ```html
 <link rel="canonical" href="https://fondationtschuess.org/[slug]">
 ```
 
 Use `%C3%B6` etc. for umlauts in the canonical URL (same encoding as in `sitemap.xml`).
-5. Add a link to `index.html`.
+
+6. Run `python optimize_images.py` — converts the new JPEGs to WebP and wraps all `<img>` tags in `<picture>` tags. The script skips images that already have an up-to-date WebP.
+7. Add a link to `index.html`.
 
 ## Git-Regeln
 
@@ -60,6 +63,18 @@ Wenn ich Änderungen am Code vornehme, folge ich immer diesem Ablauf — ohne da
 4. Branch pushen und mit `gh pr create` einen PR öffnen
 
 Am Ende jeder Änderung steht immer ein offener PR, nie ein direkter Commit auf `main`.
+
+## Bilder
+
+Alle Bilder liegen als JPEG und WebP in `/images/`. Browser laden WebP (via `<picture>`-Tag), ältere Systeme fallen auf JPEG zurück.
+
+### Neue Bilder hinzufügen
+
+1. JPEG in `/images/` ablegen (max. 2000px Breite, Kamera-Originale werden automatisch skaliert)
+2. `python optimize_images.py` ausführen — erstellt die WebP-Version und aktualisiert die HTML-Dateien
+3. Voraussetzung: `pip install Pillow` (einmalig)
+
+Das Skript überspringt Bilder, deren WebP-Version bereits aktuell ist.
 
 ## Deployment
 
