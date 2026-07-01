@@ -10,6 +10,10 @@
   <priority>0.90</priority>
 </url>
 <url>
+  <loc>https://fondationtschuess.org/weeds</loc>
+  <priority>0.80</priority>
+</url>
+<url>
   <loc>https://fondationtschuess.org/worksonwater</loc>
   <priority>0.80</priority>
 </url>
