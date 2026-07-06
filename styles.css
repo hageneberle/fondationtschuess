@@ -50,7 +50,7 @@ picture {
 }
 
 picture + picture {
-  margin-top: 20px;
+  margin-top: 25px;
 }
 
 .resize {
@@ -95,7 +95,7 @@ hr {
   }
 
   picture + picture {
-    margin-top: 10px;
+    margin-top: 15px;
   }
 iframe {
   max-width: 100%;
