@@ -1,7 +1,7 @@
 nav {
   position: fixed;
   top: 25px;
-  right: 120px;
+  left: calc(50% - 10px); /* ragt 10px in die Bilder (max-width: 50%) hinein */
   font-size: 14px !important;
   font-family: "Arial", Helvetica, sans-serif;
   z-index: 9999;
@@ -22,6 +22,7 @@ nav a {
 @media screen and (max-width: 999px) {
   nav {
     top: 25px;
+    left: auto;
     right: 30px;
     font-size: 13px !important;
   }
