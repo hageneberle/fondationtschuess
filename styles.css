@@ -45,6 +45,10 @@ img {
   margin: 0;
 }
 
+picture + picture {
+  margin-top: 20px;
+}
+
 .resize {
   width: 200px;
   height: auto;
@@ -77,13 +81,17 @@ hr {
     width: calc(100% + 10px); /* = 2 × 15px Einzug */
     max-width: calc(100% + 10px);
     height: auto;
-    margin: 0 0 10px -5px; /* = negativer Einzug */
+    margin: 0 0 0 -5px; /* = negativer Einzug */
   }
 
   img.resize {
     width: 200px;
     max-width: 200px;
     margin-left: 0;
+  }
+
+  picture + picture {
+    margin-top: 10px;
   }
 iframe {
   max-width: 100%;
