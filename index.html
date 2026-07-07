@@ -50,13 +50,10 @@
           transition: opacity 0.15s ease;
           z-index: 20000;
         }
-        /* Sobald eine Seite geöffnet ist: nur der aktive Link bleibt blau und
-           unverblasst (über dem dim-left), alle anderen werden schwarz. */
-        #index-content.preview-active a {
-          color: #000 !important;
-        }
+        /* Der aktive Link (aktuell im Panel gezeigte Seite) wird schwarz und
+           bleibt unverblasst (über dem dim-left), der Rest bleibt normal blau. */
         #index-content a.active-link {
-          color: #0000EE !important;
+          color: #000 !important;
           position: relative;
           z-index: 20001;
         }
@@ -73,13 +70,17 @@
         }
       }
       #index-content a {
-        line-height: 1.8; /* etwas mehr Zeilenabstand für Lesbarkeit/Navigation */
+        line-height: 1.3; /* Blöcke sollen durch die Leerzeilen erkennbar bleiben */
+      }
+      #index-content h1 a {
+        color: inherit;
+        text-decoration: none;
       }
     </style>
 </head>
   <body>
 <div id="index-content">
-<h1>Fondation Tschuess</h1>
+<h1><a href="index.html">Fondation Tschuess</a></h1>
 <a style="font-style: oblique; color: #0000EE;" href="information">About</a><br>
 <br>
 <br>
@@ -138,7 +139,7 @@
     var frame = document.getElementById('preview-frame');
     var content = document.getElementById('index-content');
     var dimLeft = document.getElementById('dim-left');
-    var links = document.querySelectorAll('#index-content a[href]');
+    var links = document.querySelectorAll('#index-content > a[href]'); // Direktkinder, schließt den "Fondation Tschuess"-Home-Link im h1 aus
     var previewOpened = false;
     var activeLink = null;
 
