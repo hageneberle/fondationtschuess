@@ -31,10 +31,12 @@
           border: none; /* keine sichtbare Trennlinie */
         }
         #preview-frame {
+          display: block;
+          width: 100%;
+          height: 100%;
           border: none;
           max-width: none; /* überschreibt die globale iframe-Regel aus styles.css */
           aspect-ratio: auto;
-          transform-origin: top left;
         }
         #dim-left,
         #dim-right {
@@ -124,7 +126,6 @@
 <div id="dim-right"></div>
 <script>
   (function () {
-    var FRAME_WIDTH = 1200; // px, garantiert oberhalb des 999px-Breakpoints der Zielseiten -> echtes Desktop-Layout
     var wrap = document.getElementById('preview-wrap');
     var frame = document.getElementById('preview-frame');
     var content = document.getElementById('index-content');
@@ -132,14 +133,6 @@
     var dimRight = document.getElementById('dim-right');
     var links = document.querySelectorAll('#index-content a[href]');
     var previewOpened = false;
-
-    function resizeFrame() {
-      if (!window.matchMedia('(min-width: 1000px)').matches) return;
-      var scale = wrap.clientWidth / FRAME_WIDTH;
-      frame.style.width = FRAME_WIDTH + 'px';
-      frame.style.height = (wrap.clientHeight / scale) + 'px';
-      frame.style.transform = 'scale(' + scale + ')';
-    }
 
     // Nav-Pfeile in der Vorschau ausblenden (macht dort keinen Sinn) und den
     // Zeilenumbruch davor entfernen, damit die Überschrift bündig mit dem
@@ -150,7 +143,7 @@
         var doc = frame.contentDocument;
         if (!doc) return;
         var style = doc.createElement('style');
-        style.textContent = 'nav { display: none !important; } nav + br { display: none !important; }';
+        style.textContent = 'nav { display: none !important; } nav + br { display: none !important; } body { margin-top: 25px !important; }';
         doc.head.appendChild(style);
       } catch (err) {
         // same-origin erwartet; falls nicht, Vorschau einfach ohne Anpassung lassen
@@ -170,16 +163,12 @@
       link.addEventListener('click', function (e) {
         if (window.matchMedia('(min-width: 1000px)').matches) {
           e.preventDefault();
-          resizeFrame();
           frame.src = link.getAttribute('href');
           previewOpened = true;
         }
         // Mobile: kein preventDefault, normale Navigation wie bisher
       });
     });
-
-    window.addEventListener('resize', resizeFrame);
-    resizeFrame();
   })();
 </script>
 </body>
