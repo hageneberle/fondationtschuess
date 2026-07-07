@@ -37,6 +37,11 @@
           border: none;
           max-width: none; /* überschreibt die globale iframe-Regel aus styles.css */
           aspect-ratio: auto;
+          opacity: 0;
+          transition: opacity 0.15s ease; /* dieselbe Animation wie das weiße Überblenden */
+        }
+        #preview-frame.loaded {
+          opacity: 1;
         }
         #dim-left {
           position: fixed;
@@ -184,12 +189,13 @@
       }
     }
 
-    // Panel unsichtbar halten, bis Bilder geladen UND die Override-Styles
+    // Panel per opacity-Fade einblenden, sobald geladen UND die Override-Styles
     // angewendet sind - verhindert das kurze Aufblitzen der kleinen
-    // Original-Bildgröße, bevor sie auf die Vorschau-Größe springt.
+    // Original-Bildgröße, bevor sie auf die Vorschau-Größe springt, und
+    // nutzt dieselbe Animation wie das weiße Überblenden (dim-left).
     frame.addEventListener('load', function () {
       applyPreviewStyle();
-      frame.style.visibility = 'visible';
+      frame.classList.add('loaded');
     });
 
     function updateDim(overRight) {
@@ -204,7 +210,7 @@
       link.addEventListener('click', function (e) {
         if (window.matchMedia('(min-width: 1000px)').matches) {
           e.preventDefault();
-          frame.style.visibility = 'hidden';
+          frame.classList.remove('loaded');
           frame.src = link.getAttribute('href');
           previewOpened = true;
           setActiveLink(link.getAttribute('href'));
@@ -216,7 +222,7 @@
 
     window.addEventListener('popstate', function (e) {
       if (e.state && e.state.preview) {
-        frame.style.visibility = 'hidden';
+        frame.classList.remove('loaded');
         frame.src = e.state.preview;
         previewOpened = true;
         setActiveLink(e.state.preview);
