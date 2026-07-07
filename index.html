@@ -15,21 +15,27 @@
       /* Experimentelle Vorschau: rechte Bildschirmhälfte, nur auf index.html, nur Desktop */
       @media screen and (min-width: 1000px) {
         #index-content {
-          max-width: 50%;
+          max-width: 38.2%; /* goldener Schnitt statt mittig */
         }
-        #preview-frame {
+        #preview-wrap {
           display: block;
           position: fixed;
           top: 0;
           right: 0;
-          width: 50%;
+          width: 61.8%; /* goldener Schnitt statt mittig */
           height: 100vh;
+          overflow: hidden;
+          border: none; /* keine sichtbare Trennlinie */
+        }
+        #preview-frame {
           border: none;
-          border-left: 1px solid #000;
+          max-width: none; /* überschreibt die globale iframe-Regel aus styles.css */
+          aspect-ratio: auto;
+          transform-origin: top left;
         }
       }
       @media screen and (max-width: 999px) {
-        #preview-frame {
+        #preview-wrap {
           display: none;
         }
       }
@@ -85,20 +91,37 @@
     </footer>
 
 </div>
-<iframe id="preview-frame" name="preview-frame"></iframe>
+<div id="preview-wrap">
+  <iframe id="preview-frame" name="preview-frame"></iframe>
+</div>
 <script>
   (function () {
+    var FRAME_WIDTH = 1200; // px, garantiert oberhalb des 999px-Breakpoints der Zielseiten -> echtes Desktop-Layout
+    var wrap = document.getElementById('preview-wrap');
     var frame = document.getElementById('preview-frame');
     var links = document.querySelectorAll('#index-content a[href]');
+
+    function resizeFrame() {
+      if (!window.matchMedia('(min-width: 1000px)').matches) return;
+      var scale = wrap.clientWidth / FRAME_WIDTH;
+      frame.style.width = FRAME_WIDTH + 'px';
+      frame.style.height = (wrap.clientHeight / scale) + 'px';
+      frame.style.transform = 'scale(' + scale + ')';
+    }
+
     links.forEach(function (link) {
       link.addEventListener('click', function (e) {
         if (window.matchMedia('(min-width: 1000px)').matches) {
           e.preventDefault();
+          resizeFrame();
           frame.src = link.getAttribute('href');
         }
         // Mobile: kein preventDefault, normale Navigation wie bisher
       });
     });
+
+    window.addEventListener('resize', resizeFrame);
+    resizeFrame();
   })();
 </script>
 </body>
