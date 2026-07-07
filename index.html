@@ -11,8 +11,32 @@
 	<link rel="stylesheet" type="text/css" href="nav.css">
 	<link rel="canonical" href="https://fondationtschuess.org/">
     <link rel="stylesheet" href="https://s.pageclip.co/v1/pageclip.css" media="screen">
+    <style>
+      /* Experimentelle Vorschau: rechte Bildschirmhälfte, nur auf index.html, nur Desktop */
+      @media screen and (min-width: 1000px) {
+        #index-content {
+          max-width: 50%;
+        }
+        #preview-frame {
+          display: block;
+          position: fixed;
+          top: 0;
+          right: 0;
+          width: 50%;
+          height: 100vh;
+          border: none;
+          border-left: 1px solid #000;
+        }
+      }
+      @media screen and (max-width: 999px) {
+        #preview-frame {
+          display: none;
+        }
+      }
+    </style>
 </head>
   <body>
+<div id="index-content">
 <h1>Fondation Tschuess</h1>
 <a style="font-style: oblique; color: #0000EE;" href="information">About</a><br>
 <br>
@@ -59,7 +83,24 @@
 <a style="color: #0000EE;" href="whiskers">Whiskers</a><br>
 <footer>
     </footer>
-	
+
+</div>
+<iframe id="preview-frame" name="preview-frame"></iframe>
+<script>
+  (function () {
+    var frame = document.getElementById('preview-frame');
+    var links = document.querySelectorAll('#index-content a[href]');
+    links.forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        if (window.matchMedia('(min-width: 1000px)').matches) {
+          e.preventDefault();
+          frame.src = link.getAttribute('href');
+        }
+        // Mobile: kein preventDefault, normale Navigation wie bisher
+      });
+    });
+  })();
+</script>
 </body>
 
 </html>
