@@ -50,6 +50,16 @@
           transition: opacity 0.15s ease;
           z-index: 20000;
         }
+        /* Sobald eine Seite geöffnet ist: nur der aktive Link bleibt blau und
+           unverblasst (über dem dim-left), alle anderen werden schwarz. */
+        #index-content.preview-active a {
+          color: #000 !important;
+        }
+        #index-content a.active-link {
+          color: #0000EE !important;
+          position: relative;
+          z-index: 20001;
+        }
       }
       @media screen and (max-width: 999px) {
         #preview-wrap {
@@ -58,6 +68,12 @@
         #dim-left {
           display: none;
         }
+        #index-content a {
+          white-space: nowrap;
+        }
+      }
+      #index-content a {
+        line-height: 1.8; /* etwas mehr Zeilenabstand für Lesbarkeit/Navigation */
       }
     </style>
 </head>
@@ -124,6 +140,19 @@
     var dimLeft = document.getElementById('dim-left');
     var links = document.querySelectorAll('#index-content a[href]');
     var previewOpened = false;
+    var activeLink = null;
+
+    function setActiveLink(href) {
+      if (activeLink) activeLink.classList.remove('active-link');
+      activeLink = null;
+      links.forEach(function (l) {
+        if (l.getAttribute('href') === href) {
+          l.classList.add('active-link');
+          activeLink = l;
+        }
+      });
+      content.classList.add('preview-active');
+    }
 
     // Bilder sind im Original max-width: 50% der vollen Seite. Damit sie in der
     // Vorschau trotz des schmaleren Panels 25% größer als im Original erscheinen
@@ -180,6 +209,7 @@
           frame.style.visibility = 'hidden';
           frame.src = link.getAttribute('href');
           previewOpened = true;
+          setActiveLink(link.getAttribute('href'));
           history.pushState({ preview: link.getAttribute('href') }, '', '/' + link.getAttribute('href'));
         }
         // Mobile: kein preventDefault, normale Navigation wie bisher
@@ -191,9 +221,13 @@
         frame.style.visibility = 'hidden';
         frame.src = e.state.preview;
         previewOpened = true;
+        setActiveLink(e.state.preview);
       } else {
         frame.src = '';
         previewOpened = false;
+        if (activeLink) activeLink.classList.remove('active-link');
+        activeLink = null;
+        content.classList.remove('preview-active');
       }
     });
 

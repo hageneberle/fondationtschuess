@@ -1,19 +1,19 @@
 h1 {
   font-style: oblique;
-  font-size: 14px;
+  font-size: 12.6px; /* 90% von 14px */
   font-weight: normal;
 }
 
 h2 {
   font-style: normal;
   font-weight: normal;
-  font-size: 14px;
+  font-size: 12.6px; /* 90% von 14px */
 }
 
 h3 {
   font-style: normal;
   font-weight: normal;
-  font-size: 14px;
+  font-size: 12.6px; /* 90% von 14px */
 }
 
 b {
@@ -22,12 +22,12 @@ b {
 
 a {
   font-style: oblique;
-  font-size: 15px;
+  font-size: 13.5px; /* 90% von 15px */
 }
 
 p {
   font-style: normal;
-  font-size: 14px;
+  font-size: 12.6px; /* 90% von 14px */
   font-weight: 300;
 }
 html {
@@ -58,7 +58,7 @@ picture + picture {
   height: auto;
 }
 iframe {
-  max-width: 100%;
+  max-width: 50%; /* so breit wie die Bilder */
   height: auto;
   aspect-ratio: 16 / 9;
 }
