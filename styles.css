@@ -55,7 +55,7 @@ picture + picture {
 }
 
 .resize {
-  width: 200px;
+  width: 300px; /* 50% größer als 200px */
   height: auto;
 }
 iframe {
@@ -90,8 +90,8 @@ hr {
   }
 
   img.resize {
-    width: 200px;
-    max-width: 200px;
+    width: 300px; /* 50% größer als 200px */
+    max-width: 300px;
     margin-left: 0;
   }
 
