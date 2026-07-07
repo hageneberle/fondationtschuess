@@ -2,6 +2,7 @@ h1 {
   font-style: oblique;
   font-size: 12.6px; /* 90% von 14px */
   font-weight: normal;
+  margin: 0 0 25px 0; /* fester Abstand nach der Überschrift statt <br> */
 }
 
 h2 {
@@ -75,7 +76,7 @@ hr {
     font-size: 13px;
   }
 
-  h1 { font-size: 13px; }
+  h1 { font-size: 13px; margin-bottom: 15px; }
   h2 { font-size: 12px; }
   h3 { font-size: 12px; }
   p  { font-size: 12px; }

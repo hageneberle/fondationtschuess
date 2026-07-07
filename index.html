@@ -134,7 +134,6 @@
 <div id="dim-left"></div>
 <script>
   (function () {
-    var BIGGER = 1.25; // Bilder in der Vorschau 25% größer als im Original (volle Seite)
     var wrap = document.getElementById('preview-wrap');
     var frame = document.getElementById('preview-frame');
     var content = document.getElementById('index-content');
@@ -155,19 +154,10 @@
       content.classList.add('preview-active');
     }
 
-    // Bilder sind im Original max-width: 50% der vollen Seite. Damit sie in der
-    // Vorschau trotz des schmaleren Panels 25% größer als im Original erscheinen
-    // (nicht nur 50% des schmalen Panels), rechnen wir die nötige Breite relativ
-    // zur Panel-Breite aus.
-    function imgPercent() {
-      var panelFraction = wrap.clientWidth / window.innerWidth;
-      return Math.min(100, (BIGGER * 50) / panelFraction);
-    }
-
-    // Nav-Pfeile in der Vorschau ausblenden (macht dort keinen Sinn), den
+    // Nav-Pfeile in der Vorschau ausblenden (macht dort keinen Sinn) und den
     // Zeilenumbruch davor entfernen, damit die Überschrift bündig mit dem
-    // "Fondation Tschuess" der Startseite ist, und die Bildgröße anpassen.
-    // Nur im Panel, die geladene Seite selbst bleibt unangetastet.
+    // "Fondation Tschuess" der Startseite ist. Sonst bleibt die Seite im
+    // Panel unangetastet - sie soll immer aussehen wie die echte Seite.
     function applyPreviewStyle() {
       try {
         var doc = frame.contentDocument;
@@ -179,8 +169,7 @@
         style.textContent =
           'nav { display: none !important; }' +
           'nav + br { display: none !important; }' +
-          'body { margin-top: 25px !important; }' +
-          'img { width: ' + imgPercent() + '% !important; max-width: ' + imgPercent() + '% !important; margin: 0 !important; }';
+          'body { margin-top: 25px !important; }';
         doc.head.appendChild(style);
       } catch (err) {
         // same-origin erwartet; falls nicht, Vorschau einfach ohne Anpassung lassen
@@ -230,10 +219,6 @@
         activeLink = null;
         content.classList.remove('preview-active');
       }
-    });
-
-    window.addEventListener('resize', function () {
-      if (previewOpened) applyPreviewStyle();
     });
   })();
 </script>
