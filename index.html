@@ -157,7 +157,13 @@
       }
     }
 
-    frame.addEventListener('load', applyPreviewStyle);
+    // Panel unsichtbar halten, bis Bilder geladen UND die Override-Styles
+    // angewendet sind - verhindert das kurze Aufblitzen der kleinen
+    // Original-Bildgröße, bevor sie auf die Vorschau-Größe springt.
+    frame.addEventListener('load', function () {
+      applyPreviewStyle();
+      frame.style.visibility = 'visible';
+    });
 
     function updateDim(overRight) {
       if (!previewOpened) return;
@@ -171,11 +177,24 @@
       link.addEventListener('click', function (e) {
         if (window.matchMedia('(min-width: 1000px)').matches) {
           e.preventDefault();
+          frame.style.visibility = 'hidden';
           frame.src = link.getAttribute('href');
           previewOpened = true;
+          history.pushState({ preview: link.getAttribute('href') }, '', '/' + link.getAttribute('href'));
         }
         // Mobile: kein preventDefault, normale Navigation wie bisher
       });
+    });
+
+    window.addEventListener('popstate', function (e) {
+      if (e.state && e.state.preview) {
+        frame.style.visibility = 'hidden';
+        frame.src = e.state.preview;
+        previewOpened = true;
+      } else {
+        frame.src = '';
+        previewOpened = false;
+      }
     });
 
     window.addEventListener('resize', function () {
