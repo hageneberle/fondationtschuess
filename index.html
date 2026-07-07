@@ -76,6 +76,9 @@
       #index-content h1 a {
         color: #0000EE;
       }
+      #index-content h1 {
+        margin-bottom: 0; /* Fondation Tschuess + About sollen wie ein eigener Block wirken */
+      }
     </style>
 </head>
   <body>
@@ -156,8 +159,12 @@
 
     // Nav-Pfeile in der Vorschau ausblenden (macht dort keinen Sinn) und den
     // Zeilenumbruch davor entfernen, damit die Überschrift bündig mit dem
-    // "Fondation Tschuess" der Startseite ist. Sonst bleibt die Seite im
-    // Panel unangetastet - sie soll immer aussehen wie die echte Seite.
+    // "Fondation Tschuess" der Startseite ist. Galerie-Bilder bekommen eine
+    // feste Breite (unabhängig vom Mobile/Desktop-Breakpoint der Zielseite),
+    // damit sie auf großen wie kleinen Bildschirmen ähnlich groß wirken,
+    // statt auf großen Screens klein (Desktop-50%-Regel) und auf kleinen
+    // Laptops zu groß (Mobile-Bleed-Regel) zu sein. .resize-Bilder (z.B.
+    // das About-Foto) bleiben unangetastet.
     function applyPreviewStyle() {
       try {
         var doc = frame.contentDocument;
@@ -169,7 +176,8 @@
         style.textContent =
           'nav { display: none !important; }' +
           'nav + br { display: none !important; }' +
-          'body { margin-top: 25px !important; }';
+          'body { margin-top: 25px !important; }' +
+          'img:not(.resize) { width: 70% !important; max-width: 70% !important; margin: 0 !important; }';
         doc.head.appendChild(style);
       } catch (err) {
         // same-origin erwartet; falls nicht, Vorschau einfach ohne Anpassung lassen
