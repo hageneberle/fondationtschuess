@@ -43,37 +43,20 @@
         #preview-frame.loaded {
           opacity: 1;
         }
-        #dim-left {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: var(--split);
-          height: 100vh;
-          background: rgba(255, 255, 255, 0.75);
-          opacity: 0;
-          pointer-events: none;
-          transition: opacity 0.15s ease;
-          z-index: 20000;
-        }
-        /* Der aktive Link (aktuell im Panel gezeigte Seite) wird schwarz und
-           bleibt unverblasst (über dem dim-left), der Rest bleibt normal blau. */
-        #index-content a.active-link {
-          color: #000 !important;
-          text-decoration: none !important;
-          position: relative;
-          z-index: 20001;
-        }
       }
       @media screen and (max-width: 999px) {
         #preview-wrap {
           display: none;
         }
-        #dim-left {
-          display: none;
-        }
         #index-content a {
           white-space: nowrap;
         }
+      }
+      /* Der aktive Link (aktuell im Panel gezeigte Seite) wird schwarz und
+         nicht unterstrichen, der Rest bleibt normal blau/unterstrichen. */
+      #index-content a.active-link {
+        color: #000 !important;
+        text-decoration: none !important;
       }
       #index-content a {
         line-height: 1.3; /* Blöcke sollen durch die Leerzeilen erkennbar bleiben */
@@ -139,15 +122,11 @@
 <div id="preview-wrap">
   <iframe id="preview-frame" name="preview-frame"></iframe>
 </div>
-<div id="dim-left"></div>
 <script>
   (function () {
-    var wrap = document.getElementById('preview-wrap');
     var frame = document.getElementById('preview-frame');
     var content = document.getElementById('index-content');
-    var dimLeft = document.getElementById('dim-left');
     var links = document.querySelectorAll('#index-content > a[href]'); // Direktkinder, schließt den "Fondation Tschuess"-Home-Link im h1 aus
-    var previewOpened = false;
     var activeLink = null;
 
     function setActiveLink(href) {
@@ -191,20 +170,11 @@
 
     // Panel per opacity-Fade einblenden, sobald geladen UND die Override-Styles
     // angewendet sind - verhindert das kurze Aufblitzen der kleinen
-    // Original-Bildgröße, bevor sie auf die Vorschau-Größe springt, und
-    // nutzt dieselbe Animation wie das weiße Überblenden (dim-left).
+    // Original-Bildgröße, bevor sie auf die Vorschau-Größe springt.
     frame.addEventListener('load', function () {
       applyPreviewStyle();
       frame.classList.add('loaded');
     });
-
-    function updateDim(overRight) {
-      if (!previewOpened) return;
-      dimLeft.style.opacity = overRight ? 1 : 0;
-    }
-
-    content.addEventListener('mouseenter', function () { updateDim(false); });
-    wrap.addEventListener('mouseenter', function () { updateDim(true); });
 
     links.forEach(function (link) {
       link.addEventListener('click', function (e) {
@@ -212,7 +182,6 @@
           e.preventDefault();
           frame.classList.remove('loaded');
           frame.src = link.getAttribute('href');
-          previewOpened = true;
           setActiveLink(link.getAttribute('href'));
           history.pushState({ preview: link.getAttribute('href') }, '', '/' + link.getAttribute('href'));
         }
@@ -224,11 +193,9 @@
       if (e.state && e.state.preview) {
         frame.classList.remove('loaded');
         frame.src = e.state.preview;
-        previewOpened = true;
         setActiveLink(e.state.preview);
       } else {
         frame.src = '';
-        previewOpened = false;
         if (activeLink) activeLink.classList.remove('active-link');
         activeLink = null;
         content.classList.remove('preview-active');
