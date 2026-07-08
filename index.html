@@ -12,68 +12,16 @@
 	<link rel="canonical" href="https://fondationtschuess.org/">
     <link rel="stylesheet" href="https://s.pageclip.co/v1/pageclip.css" media="screen">
     <style>
-      /* Experimentelle Vorschau: rechte Bildschirmhälfte, nur auf index.html, nur Desktop */
+      /* Experimentelle Vorschau: Klick auf einen Link öffnet die Seite in
+         einem Panel statt zu navigieren - auf Desktop nebeneinander (25/75),
+         auf Mobile nahezu vollflächig (die Liste wird auf einen schmalen,
+         antippbaren Streifen beschnitten; Tap darauf schließt die Vorschau). */
       :root {
-        --split: 25%; /* Trennlinie bei 1/4 des Bildschirms */
+        --split: 25%; /* Desktop-Teilung */
+        --split-mobile: 18%; /* Mobile: schmaler Streifen für die Liste, wenn Vorschau offen */
       }
-      @media screen and (min-width: 1000px) {
-        #index-content {
-          max-width: var(--split);
-        }
-        #preview-wrap {
-          display: block;
-          position: fixed;
-          top: 0;
-          right: 0;
-          width: calc(100% - var(--split));
-          height: 100vh;
-          overflow: hidden;
-          border: none; /* keine sichtbare Trennlinie */
-        }
-        #preview-frame {
-          display: block;
-          width: 100%;
-          height: 100%;
-          border: none;
-          max-width: none; /* überschreibt die globale iframe-Regel aus styles.css */
-          aspect-ratio: auto;
-          opacity: 0;
-          transition: opacity 0.15s ease; /* dieselbe Animation wie das weiße Überblenden */
-        }
-        #preview-frame.loaded {
-          opacity: 1;
-        }
-        #dim-left {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: var(--split);
-          height: 100vh;
-          background: rgba(255, 255, 255, 0.75);
-          opacity: 0;
-          pointer-events: none;
-          transition: opacity 0.15s ease;
-          z-index: 20000;
-        }
-        /* Der aktive Link (aktuell im Panel gezeigte Seite) wird schwarz und
-           bleibt unverblasst (über dem dim-left), der Rest bleibt normal blau. */
-        #index-content a.active-link {
-          color: #000 !important;
-          text-decoration: none !important;
-          position: relative;
-          z-index: 20001;
-        }
-      }
-      @media screen and (max-width: 999px) {
-        #preview-wrap {
-          display: none;
-        }
-        #dim-left {
-          display: none;
-        }
-        #index-content a {
-          white-space: nowrap;
-        }
+      #index-content {
+        transition: width 0.15s ease, max-width 0.15s ease;
       }
       #index-content a {
         line-height: 1.3; /* Blöcke sollen durch die Leerzeilen erkennbar bleiben */
@@ -83,6 +31,85 @@
       }
       #index-content h1 {
         margin-bottom: 0; /* Fondation Tschuess + About sollen wie ein eigener Block wirken */
+      }
+      /* Der aktive Link (aktuell im Panel gezeigte Seite) wird schwarz und
+         bleibt unverblasst (über dem dim-left), der Rest bleibt normal blau. */
+      #index-content a.active-link {
+        color: #000 !important;
+        text-decoration: none !important;
+        position: relative;
+        z-index: 20001;
+      }
+      #preview-wrap {
+        display: none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        overflow: hidden;
+        border: none; /* keine sichtbare Trennlinie */
+        transition: width 0.15s ease;
+      }
+      #preview-frame {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border: none;
+        max-width: none; /* überschreibt die globale iframe-Regel aus styles.css */
+        aspect-ratio: auto;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+      }
+      #preview-frame.loaded {
+        opacity: 1;
+      }
+      #dim-left {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.75);
+        opacity: 0;
+        transition: opacity 0.15s ease, width 0.15s ease;
+        z-index: 20000;
+      }
+      @media screen and (min-width: 1000px) {
+        #index-content {
+          max-width: var(--split);
+        }
+        body.preview-open #preview-wrap {
+          display: block;
+          width: calc(100% - var(--split));
+        }
+        body.preview-open #dim-left {
+          display: block;
+          width: var(--split);
+          pointer-events: none; /* auf Desktop nur Hover-Effekt, nicht klickbar */
+        }
+      }
+      @media screen and (max-width: 999px) {
+        #index-content {
+          width: 100%;
+        }
+        #index-content a {
+          white-space: nowrap;
+        }
+        body.preview-open #index-content {
+          width: var(--split-mobile);
+          overflow: hidden;
+        }
+        body.preview-open #preview-wrap {
+          display: block;
+          width: calc(100% - var(--split-mobile));
+        }
+        body.preview-open #dim-left {
+          display: block;
+          width: var(--split-mobile);
+          opacity: 1; /* immer überblendet solange offen - kein Hover auf Touch */
+          pointer-events: auto; /* antippbar zum Schließen */
+          cursor: pointer;
+        }
       }
     </style>
 </head>
@@ -198,35 +225,63 @@
       frame.classList.add('loaded');
     });
 
+    // Desktop: Hover steuert die Überblendung. Auf Mobile ist die Liste
+    // während einer offenen Vorschau ohnehin permanent überblendet (siehe
+    // CSS), Hover gibt es auf Touch nicht zuverlässig.
     function updateDim(overRight) {
-      if (!previewOpened) return;
+      if (!previewOpened || !window.matchMedia('(min-width: 1000px)').matches) return;
       dimLeft.style.opacity = overRight ? 1 : 0;
     }
 
     content.addEventListener('mouseenter', function () { updateDim(false); });
     wrap.addEventListener('mouseenter', function () { updateDim(true); });
 
+    function openPreview(href) {
+      document.body.classList.add('preview-open');
+      frame.classList.remove('loaded');
+      frame.src = href;
+      previewOpened = true;
+      setActiveLink(href);
+      history.pushState({ preview: href }, '', '/' + href);
+    }
+
+    // Schließt die Vorschau und geht immer zurück zur vollen Liste - unabhängig
+    // davon, wie viele Seiten zwischenzeitlich im Panel geöffnet wurden.
+    function closePreview() {
+      document.body.classList.remove('preview-open');
+      frame.classList.remove('loaded');
+      previewOpened = false;
+      if (activeLink) activeLink.classList.remove('active-link');
+      activeLink = null;
+      content.classList.remove('preview-active');
+      history.pushState(null, '', '/');
+      setTimeout(function () { frame.src = ''; }, 200); // erst nach dem Fade-out leeren
+    }
+
     links.forEach(function (link) {
       link.addEventListener('click', function (e) {
-        if (window.matchMedia('(min-width: 1000px)').matches) {
-          e.preventDefault();
-          frame.classList.remove('loaded');
-          frame.src = link.getAttribute('href');
-          previewOpened = true;
-          setActiveLink(link.getAttribute('href'));
-          history.pushState({ preview: link.getAttribute('href') }, '', '/' + link.getAttribute('href'));
-        }
-        // Mobile: kein preventDefault, normale Navigation wie bisher
+        e.preventDefault();
+        openPreview(link.getAttribute('href'));
       });
+    });
+
+    // Mobile: Tap auf den schmalen Listen-Streifen schließt die Vorschau.
+    dimLeft.addEventListener('click', function () {
+      if (!window.matchMedia('(min-width: 1000px)').matches && previewOpened) {
+        closePreview();
+      }
     });
 
     window.addEventListener('popstate', function (e) {
       if (e.state && e.state.preview) {
+        document.body.classList.add('preview-open');
         frame.classList.remove('loaded');
         frame.src = e.state.preview;
         previewOpened = true;
         setActiveLink(e.state.preview);
       } else {
+        document.body.classList.remove('preview-open');
+        frame.classList.remove('loaded');
         frame.src = '';
         previewOpened = false;
         if (activeLink) activeLink.classList.remove('active-link');
