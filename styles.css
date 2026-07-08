@@ -90,8 +90,8 @@ hr {
   }
 
   img.resize {
-    width: 300px; /* 50% größer als 200px */
-    max-width: 300px;
+    width: 150px; /* halb so groß wie Desktop (300px) */
+    max-width: 150px;
     margin-left: 0;
   }
 
