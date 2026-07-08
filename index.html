@@ -37,8 +37,7 @@
           border: none;
           max-width: none; /* überschreibt die globale iframe-Regel aus styles.css */
           aspect-ratio: auto;
-          opacity: 0;
-          transition: opacity 0.15s ease; /* dieselbe Animation wie das weiße Überblenden */
+          opacity: 0; /* bis geladen/gestylt unsichtbar, aber ohne Fade - direkter Sprung auf sichtbar */
         }
         #preview-frame.loaded {
           opacity: 1;
