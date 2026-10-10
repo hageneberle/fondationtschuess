@@ -54,6 +54,14 @@ picture + picture {
   margin-top: 25px;
 }
 
+/* Bildnachweis unter einer Bildgruppe: Abstand nach unten wie zwischen Bildern */
+.credit {
+  margin-bottom: 25px;
+}
+main > .credit:last-child {
+  margin-bottom: 1em;
+}
+
 .resize {
   width: 300px; /* 50% größer als 200px */
   height: auto;
@@ -97,6 +105,13 @@ hr {
 
   picture + picture {
     margin-top: 15px;
+  }
+
+  .credit {
+    margin-bottom: 15px;
+  }
+  main > .credit:last-child {
+    margin-bottom: 1em;
   }
 iframe {
   max-width: 100%;
