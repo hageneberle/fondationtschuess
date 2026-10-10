@@ -54,11 +54,11 @@ picture + picture {
   margin-top: 25px;
 }
 
-/* Bildnachweis unter einer Bildgruppe: Abstand nach unten wie zwischen Bildern */
-.credit {
+/* Bildunterschrift: Abstand nach unten wie zwischen Bildern */
+.caption {
   margin-bottom: 25px;
 }
-main > .credit:last-child {
+main > .caption:last-child {
   margin-bottom: 1em;
 }
 
@@ -88,7 +88,7 @@ hr {
   h2 { font-size: 12px; }
   h3 { font-size: 12px; }
   p  { font-size: 12px; }
-  .credit, .caption { font-size: 10.5px; } /* Bildunterschriften kleiner als Fließtext */
+  .caption { font-size: 10.5px; } /* Bildunterschriften kleiner als Fließtext */
   a  { font-size: 13px; }
 
   img {
@@ -108,10 +108,10 @@ hr {
     margin-top: 15px;
   }
 
-  .credit {
+  .caption {
     margin-bottom: 15px;
   }
-  main > .credit:last-child {
+  main > .caption:last-child {
     margin-bottom: 1em;
   }
 iframe {
