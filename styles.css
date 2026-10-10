@@ -56,6 +56,7 @@ picture + picture {
 
 /* Bildunterschrift: dicht am Bild, Abstand nach unten wie zwischen Bildern */
 .caption {
+  color: #666; /* etwas grauer als der Fließtext, tritt leicht zurück */
   margin-top: 4px;
   margin-bottom: 25px;
 }
