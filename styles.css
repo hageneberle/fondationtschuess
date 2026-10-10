@@ -54,8 +54,9 @@ picture + picture {
   margin-top: 25px;
 }
 
-/* Bildunterschrift: Abstand nach unten wie zwischen Bildern */
+/* Bildunterschrift: dicht am Bild, Abstand nach unten wie zwischen Bildern */
 .caption {
+  margin-top: 4px;
   margin-bottom: 25px;
 }
 main > .caption:last-child {
@@ -88,7 +89,7 @@ hr {
   h2 { font-size: 12px; }
   h3 { font-size: 12px; }
   p  { font-size: 12px; }
-  .caption { font-size: 10.5px; } /* Bildunterschriften kleiner als Fließtext */
+  .caption { font-size: 9.5px; } /* Bildunterschriften kleiner als Fließtext */
   a  { font-size: 13px; }
 
   img {
