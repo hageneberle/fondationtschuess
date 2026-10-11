@@ -12,6 +12,7 @@ Ausführen (vom Repo-Root):
     python optimize_images.py
 
 Was das Skript tut:
+    0. Alle JPEGs in images/<projekt>/ (ohne images/unpublished/) werden verarbeitet
     1. Bilder mit Breite >2000px auf 2000px runterskalieren (JPEG wird überschrieben)
     2. Für jedes JPEG eine WebP-Version erstellen (images/foo.jpg → images/foo.webp)
     3. HTML-Dateien: <img src="images/foo.jpg"> → <picture>…</picture>
@@ -61,12 +62,17 @@ IMAGES_DIR = ROOT / "images"
 # ── Schritt 1 + 2: Bilder konvertieren ───────────────────────────────────────
 
 def optimize_images():
+    # Bilder liegen in Unterordnern je Projekt (images/<projekt>/foo.jpg);
+    # images/unpublished/ wird nicht verarbeitet.
     # Auf Windows ist das Dateisystem case-insensitiv → deduplicieren
     seen = set()
     jpgs = []
-    for p in sorted(IMAGES_DIR.glob("*.jpg")) + sorted(IMAGES_DIR.glob("*.JPG")):
-        if p.name.lower() not in seen:
-            seen.add(p.name.lower())
+    for p in sorted(IMAGES_DIR.rglob("*.jpg")) + sorted(IMAGES_DIR.rglob("*.JPG")):
+        rel = p.relative_to(IMAGES_DIR)
+        if "unpublished" in rel.parts:
+            continue
+        if rel.as_posix().lower() not in seen:
+            seen.add(rel.as_posix().lower())
             jpgs.append(p)
     if not jpgs:
         print(f"Keine JPEGs in {IMAGES_DIR} gefunden.")

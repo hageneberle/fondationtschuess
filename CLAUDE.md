@@ -29,15 +29,15 @@ Every exhibition page has a fixed nav in the top-right corner (styled by `nav.cs
 
 ### Images
 
-Images live in `/images/` as JPEG + WebP pairs (e.g. `foo.jpg` and `foo.webp`). The HTML uses `<picture>` tags so browsers load WebP; JPEG serves as fallback. Both files must exist for every image. `optimize_images.py` creates the WebP versions automatically (see below).
+Images live in `/images/<page-slug>/` — one folder per page, named like the page file without `.html` (special characters replaced by `-`, e.g. `neuemoebel`, `scene4-take9-streetnamedpsychopolitics-ep1-se1`). Images that are not published sit in `/images/unpublished/`. Files are JPEG + WebP pairs (e.g. `foo.jpg` and `foo.webp`). The HTML uses `<picture>` tags so browsers load WebP; JPEG serves as fallback. Both files must exist for every image. `optimize_images.py` creates the WebP versions automatically (see below).
 
 ## Adding a new exhibition page
 
 1. Add the slug to `order.json` at the desired position.
 2. Add a `<url>` entry to `sitemap.xml` with `<priority>0.80</priority>` — no `<lastmod>`. Use `%C3%B6` etc. for umlauts in the `<loc>` URL.
 3. Update the `▲`/`▼` links on the neighboring pages.
-4. Place images in `/images/` as JPEGs (max. 2000px wide; camera originals are scaled down automatically).
-5. Create the HTML file following the structure of an existing page (see e.g. `ausstellung.html`): `<meta>` tags with description/keywords, `<link>` to both stylesheets, a `<link rel="canonical">` tag, the nav block, then content. Reference images as `<img src="images/foo.jpg" alt="...">` — the script in the next step wraps them in `<picture>` automatically.
+4. Place images in `/images/<page-slug>/` as JPEGs (max. 2000px wide; camera originals are scaled down automatically).
+5. Create the HTML file following the structure of an existing page (see e.g. `ausstellung.html`): `<meta>` tags with description/keywords, `<link>` to both stylesheets, a `<link rel="canonical">` tag, the nav block, then content. Reference images as `<img src="images/<page-slug>/foo.jpg" alt="...">` — the script in the next step wraps them in `<picture>` automatically.
 
 ```html
 <link rel="canonical" href="https://fondationtschuess.org/[slug]">
@@ -66,11 +66,11 @@ Am Ende jeder Änderung steht immer ein offener PR, nie ein direkter Commit auf 
 
 ## Bilder
 
-Alle Bilder liegen als JPEG und WebP in `/images/`. Browser laden WebP (via `<picture>`-Tag), ältere Systeme fallen auf JPEG zurück.
+Alle Bilder liegen als JPEG und WebP in `/images/<seiten-slug>/` (ein Ordner pro Seite, benannt wie die HTML-Datei ohne `.html`; Sonderzeichen werden zu `-`). Unveröffentlichte Bilder liegen in `/images/unpublished/`. Browser laden WebP (via `<picture>`-Tag), ältere Systeme fallen auf JPEG zurück.
 
 ### Neue Bilder hinzufügen
 
-1. JPEG in `/images/` ablegen (max. 2000px Breite, Kamera-Originale werden automatisch skaliert)
+1. JPEG in `/images/<seiten-slug>/` ablegen (max. 2000px Breite, Kamera-Originale werden automatisch skaliert)
 2. `python optimize_images.py` ausführen — erstellt die WebP-Version und aktualisiert die HTML-Dateien
 3. Voraussetzung: `pip install Pillow` (einmalig)
 
