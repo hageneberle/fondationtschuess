@@ -66,14 +66,23 @@
       #index-content h1 {
         margin-bottom: 0; /* Fondation Tschuess + About sollen wie ein eigener Block wirken */
       }
-      /* Jahres-Überschriften: aufklappbare Gruppen, standardmäßig eingeklappt */
+      /* Jahre: wie die Ausstellungs-Links gestaltet, klappen wie ein Ordnerbaum nach rechts auf */
       #index-content .year {
+        color: #0000EE;
+        text-decoration: underline;
+        font-style: oblique;
         font-size: 13.5px;
-        line-height: 1.3;
+        line-height: 2.6; /* regelmäßiger Abstand: eine Leerzeile zwischen den Einträgen */
         cursor: pointer;
       }
+      #index-content .year-list {
+        margin-left: 1.3em; /* eingerückt unter dem Jahr */
+        font-size: 13.5px;
+        line-height: 2.6; /* gleicher Rhythmus wie die Jahre */
+      }
       @media screen and (max-width: 999px) {
-        #index-content .year {
+        #index-content .year,
+        #index-content .year-list {
           font-size: 13px;
         }
       }
@@ -87,48 +96,45 @@
 <br>
 <details class="year-group">
 <summary class="year">2026</summary>
+<div class="year-list">
 <a style="color: #0000EE;" href="fondationtschuessathalmet">Fondation Tschuess at Halmet</a><br>
-<br>
 <a style="color: #0000EE;" href="weeds">Weeds</a><br>
-<br>
 <a style="color: #0000EE;" href="worksonwater">Works on water</a><br>
-<br>
+</div>
 </details>
 <details class="year-group">
 <summary class="year">2025</summary>
+<div class="year-list">
 <a style="color: #0000EE;" href="presentationpreparation">Presentation Preparation</a><br>
 <a style="color: #0000EE;" href="single">Single. A record is being produced</a><br>
 <a style="color: #0000EE;" href="uturn">U-Turn</a><br>
 <a style="color: #0000EE;" href="sonor">sonor</a><br>
 <a style="color: #0000EE;" href="etc4ever">ETCETERA 4 EVER</a><br>
-<a style="color: #0000EE;" href="xl">xl</a><br>	
-<br>
+<a style="color: #0000EE;" href="xl">xl</a><br>
 <a style="color: #0000EE;" href="deadtime">DEAD TIME (Melody’s Warm Up)</a><br>
-<br>
+</div>
 </details>
 <details class="year-group">
 <summary class="year">2024</summary>
-<a style="color: #0000EE;" href="crimesofthefuture">Crimes of the Future</a><br>	
-<br>
+<div class="year-list">
+<a style="color: #0000EE;" href="crimesofthefuture">Crimes of the Future</a><br>
 <a style="color: #0000EE;" href="myairmyair">My Air, My Air</a><br>
 <a style="color: #0000EE;" href="ausstellung">Ausstellung</a><br>
 <a style="color: #0000EE;" href="leavemealonewithyourattention">Leave me alone With your attention</a><br>
 <a style="color: #0000EE;" href="keineruinenmehr">Keine Ruinen mehr</a><br>
 <a style="color: #0000EE;" href="einidealerhauch">Ein idealer Hauch</a><br>
-<br>
+</div>
 </details>
 <details class="year-group">
 <summary class="year">2023</summary>
+<div class="year-list">
 <a style="color: #0000EE;" href="seminar">Seminar</a><br>
 <a style="color: #0000EE;" href="counterpunch">Counterpunch</a><br>
 <a style="color: #0000EE;" href="neuemöbel">Neue Möbel</a><br>
 <a style="color: #0000EE;" href="playingroom">Playing Room</a><br>
 <a style="color: #0000EE;" href="hinger">The Hinger</a><br>
-<br>
 <a style="color: #0000EE;" href="sellusyourlibertyorwellsubcontractyourdeath(2023)">Sell Us Your Liberty or We'll Subcontract Your Death (2023)</a><br>
-<br>
 <a style="color: #0000EE;" href="unorthodoxwaysofopeningup">Unorthodox ways of opening up</a><br>
-
 <a style="color: #0000EE;" href="dunkeldunkelblau">dunkeldunkelblau</a><br>
 <a style="color: #0000EE;" href="vertigo">vertigo</a><br>
 <a style="color: #0000EE;" href="therealglowupisinternal">The Real Glow Up Is Internal</a><br>
@@ -139,6 +145,7 @@
 <a style="color: #0000EE;" href="kino">Kino</a><br>
 <a style="color: #0000EE;" href="panoramaspeedboat+limbo-01">Panorama Speedboat / Limbo-01</a><br>
 <a style="color: #0000EE;" href="whiskers">Whiskers</a><br>
+</div>
 </details>
 <footer>
     </footer>
