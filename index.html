@@ -66,6 +66,20 @@
       #index-content h1 {
         margin-bottom: 0; /* Fondation Tschuess + About sollen wie ein eigener Block wirken */
       }
+      /* "Past": aufklappbare Kategorie für alle älteren Ausstellungen, im Link-Stil */
+      #index-content .past {
+        color: #0000EE;
+        text-decoration: underline;
+        font-style: oblique;
+        font-size: 13.5px;
+        line-height: 1.3;
+        cursor: pointer;
+      }
+      @media screen and (max-width: 999px) {
+        #index-content .past {
+          font-size: 13px;
+        }
+      }
     </style>
 </head>
   <body>
@@ -76,6 +90,8 @@
 <br>
 <a style="color: #0000EE;" href="fondationtschuessathalmet">James T. Hong, Alex Winterstein, Monika Schwitte, Pia-Rosa Dobrowitz</a><br>
 <br>
+<details class="past-group">
+<summary class="past">Past</summary>
 <a style="color: #0000EE;" href="weeds">Weeds</a><br>
 <br>
 <a style="color: #0000EE;" href="worksonwater">Works on water</a><br>
@@ -116,6 +132,7 @@
 <a style="color: #0000EE;" href="kino">Kino</a><br>
 <a style="color: #0000EE;" href="panoramaspeedboat+limbo-01">Panorama Speedboat / Limbo-01</a><br>
 <a style="color: #0000EE;" href="whiskers">Whiskers</a><br>
+</details>
 <footer>
     </footer>
 
@@ -127,7 +144,7 @@
   (function () {
     var frame = document.getElementById('preview-frame');
     var content = document.getElementById('index-content');
-    var links = document.querySelectorAll('#index-content > a[href]'); // Direktkinder, schließt den "Fondation Tschuess"-Home-Link im h1 aus
+    var links = document.querySelectorAll('#index-content > a[href], #index-content details a[href]'); // Direktkinder, schließt den "Fondation Tschuess"-Home-Link im h1 aus
     var activeLink = null;
 
     function setActiveLink(href) {
@@ -137,6 +154,8 @@
         if (l.getAttribute('href') === href) {
           l.classList.add('active-link');
           activeLink = l;
+          var group = l.closest('details');
+          if (group) group.open = true; // Past aufklappen, wenn die aktive Ausstellung darin liegt
         }
       });
       content.classList.add('preview-active');
