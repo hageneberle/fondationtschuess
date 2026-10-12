@@ -50,8 +50,12 @@ picture {
   display: block;
 }
 
+/* Zwischen aufeinanderfolgenden Bildern ist der Zwischenraum schwarz (Rahmen oben am Bild) */
 picture + picture {
-  margin-top: 25px;
+  margin-top: 0;
+}
+picture + picture > img:not(.resize) {
+  border-top: 25px solid #000;
 }
 
 /* Bildunterschrift: dicht am Bild, Abstand nach unten wie zwischen Bildern */
@@ -62,6 +66,16 @@ picture + picture {
 }
 main > .caption:last-child {
   margin-bottom: 1em;
+}
+/* Bildunterschrift zwischen zwei Bildern: weiße Schrift auf dem schwarzen Zwischenraum,
+   so breit wie die Bilder */
+.caption:has(+ picture) {
+  background: #000;
+  color: #fff;
+  margin: 0;
+  padding: 6px 8px 7px;
+  width: 50%;
+  box-sizing: border-box;
 }
 
 .resize {
@@ -107,7 +121,10 @@ hr {
   }
 
   picture + picture {
-    margin-top: 15px;
+    margin-top: 0;
+  }
+  picture + picture > img:not(.resize) {
+    border-top-width: 15px;
   }
 
   .caption {
@@ -115,6 +132,11 @@ hr {
   }
   main > .caption:last-child {
     margin-bottom: 1em;
+  }
+  .caption:has(+ picture) {
+    width: calc(100% + 10px); /* wie die Bilder */
+    margin-left: -5px;
+    padding: 2px 5px 3px;
   }
 iframe {
   max-width: 100%;
