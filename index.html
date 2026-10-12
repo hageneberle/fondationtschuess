@@ -74,6 +74,10 @@
         font-size: 13.5px;
         line-height: 1.3;
         cursor: pointer;
+        list-style: none; /* kein Dreieck vor "Past" */
+      }
+      #index-content .past::-webkit-details-marker {
+        display: none;
       }
       @media screen and (max-width: 999px) {
         #index-content .past {
@@ -87,11 +91,11 @@
 <h1><a href="index.html">Fondation Tschuess</a></h1>
 <a style="font-style: oblique; color: #0000EE;" href="information">About</a><br>
 <br>
-<br>
 <a style="color: #0000EE;" href="fondationtschuessathalmet">James T. Hong, Alex Winterstein, Monika Schwitte, Pia-Rosa Dobrowitz</a><br>
 <br>
 <details class="past-group">
 <summary class="past">Past</summary>
+<br>
 <a style="color: #0000EE;" href="weeds">Weeds</a><br>
 <br>
 <a style="color: #0000EE;" href="worksonwater">Works on water</a><br>
