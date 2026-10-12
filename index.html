@@ -17,6 +17,9 @@
         --split: 25%; /* Trennlinie bei 1/4 des Bildschirms */
       }
       @media screen and (min-width: 1000px) {
+        html {
+          scrollbar-gutter: stable; /* Platz für die Scrollleiste immer reservieren: kein Versatz der Vorschau beim Auf-/Zuklappen von Past */
+        }
         #index-content {
           max-width: var(--split);
         }
@@ -78,6 +81,9 @@
       }
       #index-content .past::-webkit-details-marker {
         display: none;
+      }
+      #index-content details[open] > .past {
+        text-decoration: none; /* aufgeklappt: ohne Unterstrich */
       }
       @media screen and (max-width: 999px) {
         #index-content .past {
