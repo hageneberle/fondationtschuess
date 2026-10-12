@@ -191,8 +191,61 @@
     // Panel per opacity-Fade einblenden, sobald geladen UND die Override-Styles
     // angewendet sind - verhindert das kurze Aufblitzen der kleinen
     // Original-Bildgröße, bevor sie auf die Vorschau-Größe springt.
+    // Pfeiltasten in der Vorschau: von Bild zu Bild springen
+    // (rechts/unten = nächstes Bild, links/oben = vorheriges Bild).
+    var KEY_OFFSET = 12; // Abstand des Bildes zum oberen Rand nach dem Sprung
+
+    function previewPictures() {
+      try {
+        var doc = frame.contentDocument;
+        return doc ? Array.prototype.slice.call(doc.querySelectorAll('main picture')) : [];
+      } catch (err) {
+        return [];
+      }
+    }
+
+    function jumpTo(pic) {
+      var win = frame.contentWindow;
+      win.scrollBy(0, pic.getBoundingClientRect().top - KEY_OFFSET);
+    }
+
+    function onArrowKey(e) {
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      var forward = (e.key === 'ArrowRight' || e.key === 'ArrowDown');
+      var backward = (e.key === 'ArrowLeft' || e.key === 'ArrowUp');
+      if (!forward && !backward) return;
+      if (!content.classList.contains('preview-active') || !frame.classList.contains('loaded')) return;
+      if (!window.matchMedia('(min-width: 1000px)').matches) return;
+      var tag = e.target && e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (e.target && e.target.isContentEditable)) return;
+      var pics = previewPictures();
+      if (!pics.length) return; // ohne Bilder normales Scrollen belassen
+      var win = frame.contentWindow;
+      var doc = frame.contentDocument;
+      // aktuelles Bild: das letzte, dessen Oberkante auf oder über dem oberen Rand liegt
+      var cur = -1;
+      for (var i = 0; i < pics.length; i++) {
+        if (pics[i].getBoundingClientRect().top <= KEY_OFFSET + 5) cur = i; else break;
+      }
+      e.preventDefault();
+      if (forward) {
+        if (cur + 1 < pics.length) jumpTo(pics[cur + 1]);
+        else win.scrollTo(0, doc.documentElement.scrollHeight); // hinter dem letzten Bild: ans Seitenende
+      } else {
+        if (cur < 0) { win.scrollTo(0, 0); return; }
+        var top = pics[cur].getBoundingClientRect().top;
+        if (top < KEY_OFFSET - 5) jumpTo(pics[cur]);          // mitten im Bild: erst an dessen Anfang
+        else if (cur > 0) jumpTo(pics[cur - 1]);
+        else win.scrollTo(0, 0);                              // erstes Bild: zurück an den Seitenanfang
+      }
+    }
+
+    document.addEventListener('keydown', onArrowKey);
     frame.addEventListener('load', function () {
       applyPreviewStyle();
+      try {
+        frame.contentDocument.addEventListener('keydown', onArrowKey); // Fokus liegt nach Klick im Frame
+      } catch (err) {}
       frame.classList.add('loaded');
     });
 
