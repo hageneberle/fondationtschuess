@@ -157,6 +157,26 @@
     var links = document.querySelectorAll('#index-content > a[href], #index-content details a[href]'); // Direktkinder, schließt den "Fondation Tschuess"-Home-Link im h1 aus
     var activeLink = null;
 
+    // Zustand von "Past" merken (pro Tab): nach dem Öffnen einer Ausstellung und
+    // Zurück-Navigieren (v. a. auf dem Handy) bleibt der Reiter aufgeklappt.
+    var pastGroup = document.querySelector('details.past-group');
+    var PAST_KEY = 'past-open';
+    function readPast() {
+      try { return sessionStorage.getItem(PAST_KEY) === '1'; } catch (err) { return null; }
+    }
+    function writePast(open) {
+      try { sessionStorage.setItem(PAST_KEY, open ? '1' : '0'); } catch (err) {}
+    }
+    if (pastGroup) {
+      var stored = readPast();
+      if (stored === true) pastGroup.open = true;
+      pastGroup.addEventListener('toggle', function () { writePast(pastGroup.open); });
+      window.addEventListener('pageshow', function (e) {
+        // Zurück aus dem Cache: gespeicherten Zustand erneut anwenden
+        if (e.persisted && readPast() === true) pastGroup.open = true;
+      });
+    }
+
     function setActiveLink(href) {
       if (activeLink) activeLink.classList.remove('active-link');
       activeLink = null;
