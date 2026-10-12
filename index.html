@@ -202,7 +202,7 @@
     function previewPictures() {
       try {
         var doc = frame.contentDocument;
-        return doc ? Array.prototype.slice.call(doc.querySelectorAll('main picture')) : [];
+        return doc ? Array.prototype.slice.call(doc.querySelectorAll('picture')) : [];
       } catch (err) {
         return [];
       }
@@ -247,9 +247,7 @@
     document.addEventListener('keydown', onArrowKey);
     frame.addEventListener('load', function () {
       applyPreviewStyle();
-      try {
-        frame.contentDocument.addEventListener('keydown', onArrowKey); // Fokus liegt nach Klick im Frame
-      } catch (err) {}
+      // Tasten im Frame behandelt keynav.js der geladenen Seite
       frame.classList.add('loaded');
     });
 
