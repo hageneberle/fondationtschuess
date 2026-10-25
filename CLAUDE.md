@@ -45,9 +45,9 @@ Images live in `/images/<page-slug>/` — one folder per page, named like the pa
 
 Use `%C3%B6` etc. for umlauts in the canonical URL (same encoding as in `sitemap.xml`).
 
-Also copy from the existing page: `<html lang="en">`, the Open Graph/Twitter block after the canonical (`og:url` = canonical, `og:image` = first image of the page as absolute URL with its real pixel size), and the `ExhibitionEvent` JSON-LD before `</head>` (name, performers, dates and location only as stated in the page's `<h1>` — leave out fields that aren't there).
+Also copy from the existing page: `<html lang="en">` and the `ExhibitionEvent` JSON-LD before `</head>` (name, performers, dates and location only as stated in the page's `<h1>` — leave out fields that aren't there). Leave out the Open Graph/Twitter block — the script in the next step adds it.
 
-6. Run `python optimize_images.py` — converts the new JPEGs to WebP and wraps all `<img>` tags in `<picture>` tags. The script skips images that already have an up-to-date WebP.
+6. Run `python optimize_images.py` — converts the new JPEGs to WebP and wraps all `<img>` tags in `<picture>` tags. The script skips images that already have an up-to-date WebP. It also adds the Open Graph/Twitter tags to pages that don't have them yet (from `<title>`, description, canonical and the first image) and keeps `og:image:width/height` in sync with the actual image size.
 7. Add a link to `index.html`.
 
 ## Git-Regeln
@@ -73,7 +73,7 @@ Alle Bilder liegen als JPEG und WebP in `/images/<seiten-slug>/` (ein Ordner pro
 ### Neue Bilder hinzufügen
 
 1. JPEG in `/images/<seiten-slug>/` ablegen (max. 2000px Breite, Kamera-Originale werden automatisch skaliert)
-2. `python optimize_images.py` ausführen — erstellt die WebP-Version und aktualisiert die HTML-Dateien
+2. `python optimize_images.py` ausführen — erstellt die WebP-Version und aktualisiert die HTML-Dateien (inkl. Open-Graph-Tags und `og:image`-Größen)
 3. Voraussetzung: `pip install Pillow` (einmalig)
 
 Das Skript überspringt Bilder, deren WebP-Version bereits aktuell ist.

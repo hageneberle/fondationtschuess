@@ -16,16 +16,23 @@ Was das Skript tut:
     1. Bilder mit Breite >2000px auf 2000px runterskalieren (JPEG wird überschrieben)
     2. Für jedes JPEG eine WebP-Version erstellen (images/foo.jpg → images/foo.webp)
     3. HTML-Dateien: <img src="images/foo.jpg"> → <picture>…</picture>
+    4. Open-Graph-/Twitter-Tags: auf Seiten ohne og:title ergänzen (aus <title>,
+       Description, Canonical und dem ersten Bild der Seite), bei allen Seiten
+       og:image:width/height an die tatsächliche Bildgröße anpassen
 
 Was das Skript NICHT tut:
     - Originalbilder löschen (JPEGs bleiben als Fallback erhalten)
     - Bereits konvertierte Dateien neu verarbeiten (Skip wenn WebP neuer als JPEG)
     - HTML-Dateien anfassen, die bereits <picture> enthalten
+    - Open-Graph-Tags auf noindex-Seiten ergänzen
+    - JSON-LD schreiben (Künstler, Daten, Ort bitte von Hand aus der <h1> übernehmen)
 """
 
+import html
 import re
 import sys
 import io
+import urllib.parse
 from pathlib import Path
 
 # UTF-8 Ausgabe erzwingen (Windows-Konsole nutzt sonst cp1252)
@@ -57,6 +64,21 @@ except ImportError:
 
 ROOT       = Path(__file__).parent
 IMAGES_DIR = ROOT / "images"
+SITE_URL   = "https://fondationtschuess.org/"
+
+
+# ── HTML lesen/schreiben ohne Zeilenenden umzuwandeln ────────────────────────
+# Manche Seiten haben Windows-Zeilenenden (CRLF). read_text()/write_text()
+# würden sie in LF umwandeln, dann sähe im Diff die ganze Datei geändert aus.
+
+def read_html(path):
+    with open(path, encoding="utf-8", newline="") as f:
+        return f.read()
+
+
+def write_html(path, text):
+    with open(path, "w", encoding="utf-8", newline="") as f:
+        f.write(text)
 
 
 # ── Schritt 1 + 2: Bilder konvertieren ───────────────────────────────────────
@@ -188,7 +210,7 @@ def update_html():
 
     updated_files = 0
     for html_path in html_files:
-        text = html_path.read_text(encoding="utf-8")
+        text = read_html(html_path)
 
         if "<picture>" in text:
             print(f"  >  {html_path.name}: bereits <picture>, uebersprungen")
@@ -197,11 +219,99 @@ def update_html():
         new_text, n = IMG_RE.subn(wrap, text)
 
         if n > 0:
-            html_path.write_text(new_text, encoding="utf-8")
+            write_html(html_path, new_text)
             print(f"  +  {html_path.name}: {n} Bild{'er' if n != 1 else ''} umgestellt")
             updated_files += 1
         else:
             print(f"  –  {html_path.name}: keine Bilder")
+
+    print(f"\n  {updated_files} Datei(en) aktualisiert.")
+
+
+# ── Schritt 4: Open-Graph-/Twitter-Tags ──────────────────────────────────────
+
+def image_size(path):
+    """Größe so, wie Browser das Bild anzeigen (EXIF-Drehung berücksichtigt)."""
+    with Image.open(path) as img:
+        w, h = img.size
+        if img.getexif().get(0x0112) in (5, 6, 7, 8):  # um 90° gedreht
+            w, h = h, w
+    return w, h
+
+
+def update_og_tags():
+    """
+    Seiten ohne og:title bekommen direkt nach dem Canonical den OG-/Twitter-Block,
+    wie er auf den bestehenden Seiten steht. Titel und Beschreibung kommen aus
+    <title> und <meta name="description">, das Bild ist das erste der Seite.
+
+    Bei allen Seiten werden og:image:width/height auf die tatsächliche Größe
+    des og:image gesetzt (z. B. nachdem Schritt 1 ein Bild verkleinert hat).
+    """
+
+    html_files = sorted(ROOT.glob("*.html"))
+    print(f"\nPruefe Open-Graph-Tags ({len(html_files)} Seiten) …\n")
+
+    updated_files = 0
+    for html_path in html_files:
+        text = read_html(html_path)
+        head = text.split("</head>")[0]
+        if re.search(r'<meta name="robots" content="[^"]*noindex', head):
+            continue
+        new_text = text
+
+        if 'property="og:title"' not in head:
+            title  = re.search(r"<title>(.*?)</title>", head, re.S)
+            desc   = re.search(r'<meta name="description" content="([^"]*)"', head)
+            canon  = re.search(r'^([ \t]*)<link rel="canonical" href="([^"]*)">', head, re.M)
+            img    = re.search(r'<img\s[^>]*?src="(images/[^"]+)"', text)
+            missing = [n for n, m in (("<title>", title), ("description", desc),
+                                      ("canonical", canon), ("Bild", img)) if not m]
+            if missing:
+                print(f"  !  {html_path.name}: keine OG-Tags, es fehlt {', '.join(missing)}")
+                continue
+
+            nl     = "\r\n" if "\r\n" in text else "\n"
+            indent = canon.group(1)
+            w, h   = image_size(ROOT / img.group(1))
+            img_url = SITE_URL + urllib.parse.quote(img.group(1), safe="/,()+-_.~'")
+            value  = lambda s: html.escape(html.unescape(s.strip()), quote=True)
+            tags = [
+                ("property", "og:title",        value(title.group(1))),
+                ("property", "og:description",  value(desc.group(1))),
+                ("property", "og:image",        img_url),
+                ("property", "og:image:width",  w),
+                ("property", "og:image:height", h),
+                ("property", "og:url",          canon.group(2)),
+                ("property", "og:type",         "website"),
+                ("property", "og:site_name",    "Fondation Tschuess"),
+                ("name",     "twitter:card",        "summary_large_image"),
+                ("name",     "twitter:title",       value(title.group(1))),
+                ("name",     "twitter:description", value(desc.group(1))),
+                ("name",     "twitter:image",       img_url),
+            ]
+            block = "".join(f'{nl}{indent}<meta {k}="{n}" content="{v}">' for k, n, v in tags)
+            new_text = new_text[:canon.end()] + block + new_text[canon.end():]
+            print(f"  +  {html_path.name}: OG-Tags ergaenzt ({img.group(1)}, {w}×{h})")
+
+        # og:image:width/height an die tatsächliche Bildgröße anpassen
+        og_img = re.search(r'<meta property="og:image" content="' + re.escape(SITE_URL) + r'([^"]+)"', new_text)
+        if og_img:
+            img_path = ROOT / urllib.parse.unquote(og_img.group(1))
+            if img_path.exists():
+                w, h = image_size(img_path)
+                for name, val in (("width", w), ("height", h)):
+                    new_text, n = re.subn(
+                        r'(<meta property="og:image:' + name + r'" content=")(\d+)(")',
+                        lambda m: m.group(1) + str(val) + m.group(3), new_text)
+            else:
+                print(f"  !  {html_path.name}: og:image nicht gefunden ({img_path.relative_to(ROOT)})")
+
+        if new_text != text:
+            write_html(html_path, new_text)
+            if 'property="og:title"' in head:
+                print(f"  ~  {html_path.name}: og:image-Groesse aktualisiert")
+            updated_files += 1
 
     print(f"\n  {updated_files} Datei(en) aktualisiert.")
 
@@ -221,6 +331,7 @@ if __name__ == "__main__":
 
     optimize_images()
     update_html()
+    update_og_tags()
 
     print()
     print("=" * 56)
