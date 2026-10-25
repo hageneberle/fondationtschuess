@@ -45,6 +45,8 @@ Images live in `/images/<page-slug>/` — one folder per page, named like the pa
 
 Use `%C3%B6` etc. for umlauts in the canonical URL (same encoding as in `sitemap.xml`).
 
+Also copy from the existing page: `<html lang="en">`, the Open Graph/Twitter block after the canonical (`og:url` = canonical, `og:image` = first image of the page as absolute URL with its real pixel size), and the `ExhibitionEvent` JSON-LD before `</head>` (name, performers, dates and location only as stated in the page's `<h1>` — leave out fields that aren't there).
+
 6. Run `python optimize_images.py` — converts the new JPEGs to WebP and wraps all `<img>` tags in `<picture>` tags. The script skips images that already have an up-to-date WebP.
 7. Add a link to `index.html`.
 
