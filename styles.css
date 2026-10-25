@@ -30,6 +30,8 @@ p {
   font-style: normal;
   font-size: 12.6px; /* 90% von 14px */
   font-weight: 300;
+  line-height: 1.45; /* lange Texte luftiger als "normal" (~1.2) */
+  max-width: 50%; /* so breit wie die Bilder, endet vor der Nav */
 }
 html {
   overflow-x: hidden;
@@ -56,7 +58,8 @@ picture + picture {
 
 /* Bildunterschrift: dicht am Bild, Abstand nach unten wie zwischen Bildern */
 .caption {
-  color: #777; /* etwas grauer als der Fließtext, tritt leicht zurück */
+  color: #707070; /* etwas grauer als der Fließtext, tritt leicht zurück (Kontrast 4,95:1) */
+  line-height: normal; /* Bildunterschriften bleiben kompakt */
   margin-top: 4px;
   margin-bottom: 25px;
 }
@@ -89,8 +92,8 @@ hr {
   h1 { font-size: 13px; margin-bottom: 15px; }
   h2 { font-size: 12px; }
   h3 { font-size: 12px; }
-  p  { font-size: 12px; }
-  .caption { font-size: 9px; } /* Bildunterschriften kleiner als Fließtext */
+  p  { font-size: 12px; max-width: none; }
+  .caption { font-size: 11px; } /* Bildunterschriften kleiner als Fließtext */
   a  { font-size: 13px; }
 
   img {
