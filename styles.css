@@ -56,6 +56,29 @@ picture + picture {
   margin-top: 25px;
 }
 
+/* Hochformate: halb so breit wie Querformate, zwei aufeinanderfolgende nebeneinander */
+picture.hoch img {
+  max-width: calc(25% - 12.5px); /* = Breite eines Bildes im Paar */
+}
+.paar {
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+  max-width: 50%; /* zusammen so breit wie ein Querformat */
+  margin-top: 25px;
+}
+.paar picture {
+  flex: 1;
+  min-width: 0;
+  margin-top: 0;
+}
+.paar img {
+  max-width: 100%;
+}
+.paar + picture {
+  margin-top: 25px;
+}
+
 /* Bildunterschrift: dicht am Bild, Abstand nach unten wie zwischen Bildern */
 .caption {
   color: #707070; /* etwas grauer als der Fließtext, tritt leicht zurück (Kontrast 4,95:1) */
@@ -110,6 +133,21 @@ hr {
   }
 
   picture + picture {
+    margin-top: 15px;
+  }
+
+  /* Hochformate auf Mobile wie alle Bilder: volle Breite, untereinander */
+  picture.hoch img,
+  .paar img {
+    max-width: calc(100% + 10px);
+  }
+  .paar {
+    display: block;
+    max-width: none;
+    margin-top: 15px;
+  }
+  .paar picture + picture,
+  .paar + picture {
     margin-top: 15px;
   }
 
