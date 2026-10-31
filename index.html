@@ -259,7 +259,12 @@
           'nav { display: none !important; }' +
           'nav + br { display: none !important; }' +
           'body { margin-top: 25px !important; }' +
-          'img:not(.resize) { width: 70% !important; max-width: 70% !important; margin: 0 !important; }';
+          'img:not(.resize) { width: 70% !important; max-width: 70% !important; margin: 0 !important; }' +
+          // Hochformate (z.B. klix): halb so breit, Paare nebeneinander - zusammen so breit wie ein Querformat
+          '.paar { display: flex !important; align-items: flex-start; gap: 25px; max-width: 70% !important; }' +
+          '.paar picture { flex: 1; min-width: 0; margin-top: 0 !important; }' +
+          '.paar img { width: 100% !important; max-width: 100% !important; }' +
+          'picture.hoch img { width: calc(35% - 12.5px) !important; max-width: calc(35% - 12.5px) !important; }';
         doc.head.appendChild(style);
       } catch (err) {
         // same-origin erwartet; falls nicht, Vorschau einfach ohne Anpassung lassen
