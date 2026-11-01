@@ -324,18 +324,49 @@
     }
 
     document.addEventListener('keydown', onArrowKey);
-    frame.addEventListener('load', function () {
+
+    // Panel zeigen, sobald Text und Stylesheets der neuen Seite da sind -
+    // nicht erst beim load-Event, das auf alle Bilder wartet (klix: ~8 MB).
+    // Die Bilder laden danach sichtbar nach.
+    function showPreview() {
       applyPreviewStyle();
       // Tasten im Frame behandelt keynav.js der geladenen Seite
       frame.classList.add('loaded');
-    });
+    }
+
+    var loadToken = 0;
+
+    function loadPreview(href) {
+      var token = ++loadToken; // schneller Klickwechsel: nur die letzte Prüfung zählt
+      var oldDoc = null;
+      try { oldDoc = frame.contentDocument; } catch (err) {}
+      frame.classList.remove('loaded');
+      frame.src = href;
+      (function check() {
+        if (token !== loadToken || frame.classList.contains('loaded')) return;
+        try {
+          var doc = frame.contentDocument;
+          if (doc && doc !== oldDoc && doc.readyState !== 'loading') {
+            var sheetsReady = Array.prototype.every.call(
+              doc.querySelectorAll('link[rel="stylesheet"]'),
+              function (l) { return l.sheet; }
+            );
+            if (sheetsReady) { showPreview(); return; }
+          }
+        } catch (err) {
+          return; // nicht same-origin: dann eben beim load-Event
+        }
+        setTimeout(check, 15);
+      })();
+    }
+
+    frame.addEventListener('load', showPreview); // Fallback, falls die Prüfung oben nicht greift
 
     links.forEach(function (link) {
       link.addEventListener('click', function (e) {
         if (window.matchMedia('(min-width: 1000px)').matches) {
           e.preventDefault();
-          frame.classList.remove('loaded');
-          frame.src = link.getAttribute('href');
+          loadPreview(link.getAttribute('href'));
           setActiveLink(link.getAttribute('href'));
           history.pushState({ preview: link.getAttribute('href') }, '', '/' + link.getAttribute('href'));
         }
@@ -345,8 +376,7 @@
 
     window.addEventListener('popstate', function (e) {
       if (e.state && e.state.preview) {
-        frame.classList.remove('loaded');
-        frame.src = e.state.preview;
+        loadPreview(e.state.preview);
         setActiveLink(e.state.preview);
       } else {
         frame.src = '';
