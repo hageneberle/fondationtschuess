@@ -133,7 +133,7 @@ hr {
   }
 
   picture + picture {
-    margin-top: 15px;
+    margin-top: 8px; /* schmalere Abstände zwischen den Bildern */
   }
 
   /* Hochformate auf Mobile wie alle Bilder: volle Breite, untereinander */
@@ -144,11 +144,11 @@ hr {
   .paar {
     display: block;
     max-width: none;
-    margin-top: 15px;
+    margin-top: 8px;
   }
   .paar picture + picture,
   .paar + picture {
-    margin-top: 15px;
+    margin-top: 8px;
   }
 
   .caption {
