@@ -46,17 +46,23 @@
           overflow: hidden;
           border: none; /* keine sichtbare Trennlinie */
         }
-        #preview-frame {
+        /* Zwei übereinanderliegende Frames: die neue Seite lädt unsichtbar im
+           zweiten, die alte bleibt stehen, bis die neue fertig ist - dann
+           direkter Wechsel ohne leeren Zwischenstand */
+        #preview-wrap iframe {
           display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
           width: 100%;
           height: 100%;
           border: none;
           max-width: none; /* überschreibt die globale iframe-Regel aus styles.css */
           aspect-ratio: auto;
-          opacity: 0; /* bis geladen/gestylt unsichtbar, aber ohne Fade - direkter Sprung auf sichtbar */
+          visibility: hidden;
         }
-        #preview-frame.loaded {
-          opacity: 1;
+        #preview-wrap iframe.loaded {
+          visibility: visible;
         }
       }
       @media screen and (max-width: 999px) {
@@ -197,10 +203,12 @@
 </div>
 <div id="preview-wrap">
   <iframe id="preview-frame" name="preview-frame"></iframe>
+  <iframe id="preview-frame-2" tabindex="-1"></iframe>
 </div>
 <script>
   (function () {
-    var frame = document.getElementById('preview-frame');
+    var frame = document.getElementById('preview-frame'); // der gerade sichtbare Frame
+    var frames = [frame, document.getElementById('preview-frame-2')];
     var content = document.getElementById('index-content');
     var links = document.querySelectorAll('#index-content > a[href], #index-content details a[href]'); // Direktkinder, schließt den "Fondation Tschuess"-Home-Link im h1 aus
     var activeLink = null;
@@ -247,10 +255,14 @@
     // statt auf großen Screens klein (Desktop-50%-Regel) und auf kleinen
     // Laptops zu groß (Mobile-Bleed-Regel) zu sein. .resize-Bilder (z.B.
     // das About-Foto) bleiben unangetastet.
-    function applyPreviewStyle() {
+    // Text wie in der Einzelansicht: gleiche Schriftgrößen wie am Desktop und
+    // dieselbe Zeilenbreite in px (dort 50% der Inhaltsbreite des ganzen
+    // Fensters) - so brechen die Zeilen an denselben Stellen um.
+    function applyPreviewStyle(f) {
       try {
-        var doc = frame.contentDocument;
-        if (!doc) return;
+        var doc = (f || frame).contentDocument;
+        if (!doc || !doc.head) return;
+        var textWidth = Math.round((document.documentElement.clientWidth - 50) / 2);
         var existing = doc.getElementById('preview-style-override');
         if (existing) existing.remove();
         var style = doc.createElement('style');
@@ -264,16 +276,16 @@
           '.paar { display: flex !important; align-items: flex-start; gap: 25px; max-width: 70% !important; }' +
           '.paar picture { flex: 1; min-width: 0; margin-top: 0 !important; }' +
           '.paar img { width: 100% !important; max-width: 100% !important; }' +
-          'picture.hoch img { width: calc(35% - 12.5px) !important; max-width: calc(35% - 12.5px) !important; }';
+          'picture.hoch img { width: calc(35% - 12.5px) !important; max-width: calc(35% - 12.5px) !important; }' +
+          'h1 { font-size: 12.6px !important; margin-bottom: 25px !important; }' +
+          'p { font-size: 12.6px !important; max-width: min(' + textWidth + 'px, 100%) !important; }' +
+          'p a { font-size: 13.5px; }';
         doc.head.appendChild(style);
       } catch (err) {
         // same-origin erwartet; falls nicht, Vorschau einfach ohne Anpassung lassen
       }
     }
 
-    // Panel per opacity-Fade einblenden, sobald geladen UND die Override-Styles
-    // angewendet sind - verhindert das kurze Aufblitzen der kleinen
-    // Original-Bildgröße, bevor sie auf die Vorschau-Größe springt.
     // Pfeiltasten in der Vorschau: von Bild zu Bild springen
     // (rechts/unten = nächstes Bild, links/oben = vorheriges Bild).
     var KEY_OFFSET = 12; // Abstand des Bildes zum oberen Rand nach dem Sprung
@@ -325,33 +337,66 @@
 
     document.addEventListener('keydown', onArrowKey);
 
-    // Panel zeigen, sobald Text und Stylesheets der neuen Seite da sind -
-    // nicht erst beim load-Event, das auf alle Bilder wartet (klix: ~8 MB).
-    // Die Bilder laden danach sichtbar nach.
-    function showPreview() {
-      applyPreviewStyle();
-      // Tasten im Frame behandelt keynav.js der geladenen Seite
-      frame.classList.add('loaded');
+    // Seitenwechsel im Panel: Die neue Seite lädt unsichtbar im zweiten Frame,
+    // die alte bleibt so lange stehen. Gewechselt wird, sobald Text, CSS und
+    // die Bilder des ersten Bildschirms da sind (höchstens MAX_WAIT ms nach dem
+    // Klick, danach laden die restlichen Bilder sichtbar nach). So gibt es
+    // weder ein leeres Panel noch nachrutschende Bilder oben.
+    var MAX_WAIT = 700;
+    var loadToken = 0;
+    var pending = null; // Frame, in dem gerade die nächste Seite lädt
+
+    function firstScreenReady(f, doc) {
+      var imgs = doc.querySelectorAll('img');
+      var height = f.clientHeight;
+      for (var i = 0; i < imgs.length; i++) {
+        if (!imgs[i].complete) return false;
+        if (imgs[i].getBoundingClientRect().bottom >= height) return true; // Rest liegt unterhalb
+      }
+      return true;
     }
 
-    var loadToken = 0;
+    // Adresse eines Frames setzen, ohne Eintrag im Browserverlauf - sonst
+    // würde die Zurück-Taste erst durch die Frames blättern
+    function setFrameUrl(f, url) {
+      if (url !== 'about:blank') url = new URL(url, location.href).href;
+      try { f.contentWindow.location.replace(url); } catch (err) { f.src = url; }
+    }
+
+    function swapTo(f) {
+      var old = frame;
+      f.classList.add('loaded');
+      frame = f;
+      pending = null;
+      if (old !== f) {
+        old.classList.remove('loaded');
+        setFrameUrl(old, 'about:blank'); // laufende Bild-Downloads der alten Seite abbrechen
+      }
+    }
 
     function loadPreview(href) {
-      var token = ++loadToken; // schneller Klickwechsel: nur die letzte Prüfung zählt
+      var token = ++loadToken; // schneller Klickwechsel: nur der letzte Klick zählt
+      var f = frame === frames[0] ? frames[1] : frames[0];
+      var started = Date.now();
       var oldDoc = null;
-      try { oldDoc = frame.contentDocument; } catch (err) {}
-      frame.classList.remove('loaded');
-      frame.src = href;
+      try { oldDoc = f.contentDocument; } catch (err) {}
+      var styled = false;
+      pending = f;
+      f.classList.remove('loaded');
+      setFrameUrl(f, href);
       (function check() {
-        if (token !== loadToken || frame.classList.contains('loaded')) return;
+        if (token !== loadToken) return;
         try {
-          var doc = frame.contentDocument;
-          if (doc && doc !== oldDoc && doc.readyState !== 'loading') {
+          var doc = f.contentDocument;
+          if (doc && doc !== oldDoc && doc.readyState !== 'loading' && doc.head) {
             var sheetsReady = Array.prototype.every.call(
               doc.querySelectorAll('link[rel="stylesheet"]'),
               function (l) { return l.sheet; }
             );
-            if (sheetsReady) { showPreview(); return; }
+            if (sheetsReady) {
+              if (!styled) { applyPreviewStyle(f); styled = true; }
+              if (firstScreenReady(f, doc) || Date.now() - started > MAX_WAIT) { swapTo(f); return; }
+            }
           }
         } catch (err) {
           return; // nicht same-origin: dann eben beim load-Event
@@ -360,9 +405,32 @@
       })();
     }
 
-    frame.addEventListener('load', showPreview); // Fallback, falls die Prüfung oben nicht greift
+    frames.forEach(function (f) {
+      f.addEventListener('load', function () {
+        try { if (f.contentWindow.location.href === 'about:blank') return; } catch (err) {}
+        applyPreviewStyle(f);
+        if (f === pending) swapTo(f); // Fallback, falls die Prüfung oben nicht greift
+      });
+    });
+
+    // Fensterbreite geändert: Textbreite der Vorschau neu berechnen
+    window.addEventListener('resize', function () {
+      if (frame.classList.contains('loaded')) applyPreviewStyle(frame);
+    });
+
+    // Beim Überfahren eines Links die Seite schon vorladen
+    var prefetched = {};
+    function prefetch(href) {
+      if (prefetched[href] || !window.matchMedia('(min-width: 1000px)').matches) return;
+      prefetched[href] = true;
+      var l = document.createElement('link');
+      l.rel = 'prefetch';
+      l.href = href;
+      document.head.appendChild(l);
+    }
 
     links.forEach(function (link) {
+      link.addEventListener('mouseenter', function () { prefetch(link.getAttribute('href')); });
       link.addEventListener('click', function (e) {
         if (window.matchMedia('(min-width: 1000px)').matches) {
           e.preventDefault();
@@ -379,7 +447,9 @@
         loadPreview(e.state.preview);
         setActiveLink(e.state.preview);
       } else {
-        frame.src = '';
+        loadToken++;
+        pending = null;
+        frames.forEach(function (f) { f.classList.remove('loaded'); setFrameUrl(f, 'about:blank'); });
         if (activeLink) activeLink.classList.remove('active-link');
         activeLink = null;
         content.classList.remove('preview-active');
