@@ -82,6 +82,6 @@ Das Skript überspringt Bilder, deren WebP-Version bereits aktuell ist.
 
 GitHub Pages deployed automatisch von `main` — der `CNAME`-Eintrag zeigt auf `fondationtschuess.org`.
 
-## Form handling
+## Newsletter
 
-`information.html` and `mailing-list.html` use [Pageclip](https://pageclip.co) for the newsletter subscription form (script loaded from their CDN). `formschutz.js` (included right after each form) binds Pageclip to the form and adds spam protection: a hidden honeypot field and a minimum time before submitting. Blocked submissions show the normal thank-you message but send nothing.
+There is no form. `information.html` and `mailing-list.html` have a "Subscribe to newsletter" link (`mailto:contact@fondationtschuess.org` with a pre-filled subject). Subscriptions arrive as emails and are added to the list by hand. This avoids bot sign-ups.
